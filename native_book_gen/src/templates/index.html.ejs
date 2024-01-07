@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Components</title>
+  </head>
+  <body>
+    <h1>Components</h1>
+    <ul>
+      <% components.forEach(function(component){ _%>
+      <li>
+        <a href="<%- component.name %>.html"><%- component.name %></a>
+      </li>
+      <% }); _%>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "native_book_gen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "native-book-gen": "npx ts-node ./src/NativeBookGen.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^20.10.2",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "components": [
+    {
+      "name": "FixFlex",
+      "storiesFilePath": "FixFlexSamples/Stories/FixFlexStories.swift",
+      "snapshotsFolderPath": "Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests"
+    }
+  ]
+}

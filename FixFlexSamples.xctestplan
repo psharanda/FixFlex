@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "C7479585-2C92-420D-A6D7-DADE5B4674D9",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "IMAGE_DIFF_DIR",
+        "value" : "$(SOURCE_ROOT)\/Ref\/FailureDiffs"
+      },
+      {
+        "key" : "FB_REFERENCE_IMAGE_DIR",
+        "value" : "$(SOURCE_ROOT)\/Ref\/ReferenceImages"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:FixFlexSamples.xcodeproj",
+      "identifier" : "1BDD34842B1BC3A300B19632",
+      "name" : "FixFlexSamples"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:FixFlexSamples.xcodeproj",
+        "identifier" : "1BDD349A2B1BC3A500B19632",
+        "name" : "FixFlexSamplesTests"
+      }
+    }
+  ],
+  "version" : 1
+}
