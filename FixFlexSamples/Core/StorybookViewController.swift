@@ -32,7 +32,7 @@ class StorybookViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellId") ?? UITableViewCell()
-        cell.textLabel?.text = componentsStories[indexPath.section].stories[indexPath.row].name
+        cell.textLabel?.text = componentsStories[indexPath.section].stories[indexPath.row].nameAsWords
         return cell
     }
 

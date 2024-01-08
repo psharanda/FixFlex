@@ -7,6 +7,20 @@ import UIKit
 struct Story {
     let name: String
     let makeView: () -> UIView
+
+    var nameAsWords: String {
+        var newString = ""
+        let letters = Array(name)
+
+        for (index, letter) in letters.enumerated() {
+            if letter.isUppercase && index != 0 {
+                newString += " "
+            }
+            newString += String(letter)
+        }
+
+        return newString
+    }
 }
 
 protocol ComponentStories {

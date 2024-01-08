@@ -1,18 +1,28 @@
 import * as fs from "fs";
 import * as ejs from "ejs";
+import * as imageSize from "image-size";
 
 const repoRoot = __dirname + "/../../";
-const siteDir = repoRoot + "docs";
+const readmePath = repoRoot + `/README.md`;
+
+function pascalCaseToWords(input: string): string {
+  return input.replace(/([A-Z][a-z]+)/g, (match, p1, offset) =>
+    offset > 0 ? ` ${p1}` : p1
+  );
+}
 
 interface Story {
   name: string;
+  nameAsWords: string;
   codeSnippet: string;
+  imageName: string;
+  imageWidth: number;
+  imageHeight: number;
 }
 
 interface Component {
   name: string;
   stories: Story[];
-  snapshotsFolderPath: string;
 }
 
 function formatMultilineString(input: string): string {
@@ -39,7 +49,10 @@ function formatMultilineString(input: string): string {
   return lines.join("\n");
 }
 
-function storiesFromFile(filePath: string): Story[] {
+function storiesFromFile(
+  filePath: string,
+  snapshotsFolderPath: string
+): Story[] {
   const sourceCode = fs.readFileSync(repoRoot + filePath, "utf-8");
 
   const codeSnippetRegex =
@@ -48,36 +61,30 @@ function storiesFromFile(filePath: string): Story[] {
   const result: Story[] = [];
   let match;
   while ((match = codeSnippetRegex.exec(sourceCode)) !== null && match.groups) {
+    let storyName = match.groups["name"];
+    let imageName = `${snapshotsFolderPath}/test_${storyName}__default@3x.png`;
+    let size = imageSize.imageSize(repoRoot + imageName);
+    let imageWidth = size.width ?? 0;
+    let imageHeight = size.height ?? 0;
     result.push({
-      name: match.groups["name"],
+      name: storyName,
+      nameAsWords: pascalCaseToWords(match.groups["name"]),
       codeSnippet: formatMultilineString(match.groups["codeSnippet"]),
+      imageName: imageName,
+      imageWidth: imageWidth,
+      imageHeight: imageHeight,
     });
   }
 
   return result;
 }
 
-function renderIndex(components: Component[]) {
+function renderReadme(component: Component) {
   fs.writeFileSync(
-    siteDir + "/index.html",
-    ejs.render(
-      fs.readFileSync(__dirname + "/templates/index.html.ejs", "utf-8"),
-      {
-        components: components,
-      }
-    )
-  );
-}
-
-function renderComponent(component: Component) {
-  fs.writeFileSync(
-    siteDir + `/${component.name}.html`,
-    ejs.render(
-      fs.readFileSync(__dirname + "/templates/component.html.ejs", "utf-8"),
-      {
-        component: component,
-      }
-    )
+    repoRoot + `/README.md`,
+    ejs.render(fs.readFileSync(__dirname + "/templates/README.md", "utf-8"), {
+      component: component,
+    })
   );
 }
 
@@ -95,28 +102,16 @@ function renderComponent(component: Component) {
   for (const componentJson of config["components"]) {
     components.push({
       name: componentJson["name"],
-      stories: storiesFromFile(componentJson["storiesFilePath"]),
-      snapshotsFolderPath: componentJson["snapshotsFolderPath"],
+      stories: storiesFromFile(
+        componentJson["storiesFilePath"],
+        componentJson["snapshotsFolderPath"]
+      ),
     });
   }
 
   // prepare site folder
-  if (fs.existsSync(siteDir)) {
-    fs.rmSync(siteDir, { recursive: true });
+  if (fs.existsSync(readmePath)) {
+    fs.rmSync(readmePath);
   }
-
-  fs.mkdirSync(siteDir, { recursive: true });
-
-  // render html site
-  renderIndex(components);
-  for (const component of components) {
-    fs.cpSync(
-      repoRoot + component.snapshotsFolderPath,
-      `${siteDir}/img/${component.name}`,
-      {
-        recursive: true,
-      }
-    );
-    renderComponent(component);
-  }
+  renderReadme(components[0]);
 })();

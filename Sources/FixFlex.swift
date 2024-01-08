@@ -74,29 +74,29 @@ public func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, hug
 
 /// Match shorthands
 
-public func Match(_ dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+public func Match(dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
     return PutIntent(views: nil, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
-public func Match(_ view: _View, _ dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
-    return Match([view], dimension, multiplier: multiplier, offset: offset)
+public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+    return Match([view], dimension: dimension, multiplier: multiplier, offset: offset)
 }
 
-public func Match(_ views: [_View], _ dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
     return PutIntent(views: views, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
 /// Split shorthands
 
-public func Split(_ weight: CGFloat = 1.0) -> PutIntent {
+public func Split(weight: CGFloat = 1.0) -> PutIntent {
     return PutIntent(views: nil, sizing: .split(weight: weight))
 }
 
-public func Split(_ view: _View, _ weight: CGFloat = 1.0) -> PutIntent {
-    return Split([view], weight)
+public func Split(_ view: _View, weight: CGFloat = 1.0) -> PutIntent {
+    return Split([view], weight: weight)
 }
 
-public func Split(_ views: [_View], _ weight: CGFloat = 1.0) -> PutIntent {
+public func Split(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent {
     return PutIntent(views: views, sizing: .split(weight: weight))
 }
 
