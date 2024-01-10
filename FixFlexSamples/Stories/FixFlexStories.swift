@@ -19,8 +19,13 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-        parent.fx.hput(Fix(15), Flex(child), Fix(15))
-        parent.fx.vput(Fix(15), Flex(child), Fix(15))
+        parent.fx.hput(Fix(15),
+                       Flex(child),
+                       Fix(15))
+        
+        parent.fx.vput(Fix(15),
+                       Flex(child),
+                       Fix(15))
 
         return parent
     }
@@ -160,26 +165,25 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
-        parent.fx.hput(Fix(10),
+        parent.fx.hput(Fix(15),
                        Fix(iconView, 44),
-                       Fix(10),
+                       Fix(15),
                        Flex([titleLabel, subtitleLabel]),
-                       Fix(10),
+                       Fix(15),
                        Fix(chevron, 20),
-                       Fix(10))
+                       Fix(15))
 
-        parent.fx.vput(Fix(5),
+        parent.fx.vput(Fix(15),
                        Fix(iconView, 44),
-                       Flex(min: 5))
+                       Flex(min: 15))
         
-        parent.fx.vput(Fix(5),
+        parent.fx.vput(Fix(15),
                        Flex(titleLabel),
-                       Fix(5),
                        Flex(subtitleLabel),
-                       Fix(5))
+                       Fix(15))
         
         parent.fx.vput(Split(),
-                       Fix(chevron, 20),
+                       Fix(chevron, 30),
                        Split())
 
         return parent
@@ -259,20 +263,20 @@ class FixFlexStories: DynamicComponentStories {
 
     @objc static func story_LabelsSplit() -> UIView {
         let label1 = UILabel()
-        label1.text = "1) label"
-        label1.font = .preferredFont(forTextStyle: .title1)
+        label1.text = "L1"
+        label1.font = .preferredFont(forTextStyle: .title3)
         label1.adjustsFontForContentSizeCategory = true
         label1.backgroundColor = .systemYellow
 
         let label2 = UILabel()
-        label2.text = "2) label"
-        label2.font = .preferredFont(forTextStyle: .title1)
+        label2.text = "L2"
+        label2.font = .preferredFont(forTextStyle: .title3)
         label2.adjustsFontForContentSizeCategory = true
         label2.backgroundColor = .systemOrange
 
         let label3 = UILabel()
-        label3.text = "3) label"
-        label3.font = .preferredFont(forTextStyle: .title1)
+        label3.text = "L3"
+        label3.font = .preferredFont(forTextStyle: .title3)
         label3.adjustsFontForContentSizeCategory = true
         label3.backgroundColor = .systemBrown
 

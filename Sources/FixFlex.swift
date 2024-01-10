@@ -29,7 +29,7 @@ public struct PutIntent {
     enum Sizing {
         case fix(value: CGFloat)
         case flex(min: CGFloat?, max: CGFloat?, huggingPriority: _LayoutPriority?, compressionResistancePriority: _LayoutPriority?)
-        case match(dimension: NSLayoutDimension, multiplier: CGFloat, offset: CGFloat)
+        case match(dimension: NSLayoutDimension, multiplier: CGFloat?, offset: CGFloat?)
         case split(weight: CGFloat)
     }
 
@@ -74,15 +74,15 @@ public func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, hug
 
 /// Match shorthands
 
-public func Match(dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+public func Match(dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
     return PutIntent(views: nil, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
-public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
     return Match([view], dimension: dimension, multiplier: multiplier, offset: offset)
 }
 
-public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> PutIntent {
+public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
     return PutIntent(views: views, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
@@ -238,7 +238,7 @@ public extension FixFlexing {
                         handleSizingConstraint(aa.dimensionAnchor.constraint(lessThanOrEqualToConstant: max))
                     }
                 case let .match(dimension, multiplier, offset):
-                    handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: dimension, multiplier: multiplier, constant: offset))
+                    handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: dimension, multiplier: multiplier ?? 1, constant: offset ?? 0))
                 case let .split(weight):
                     if let weightsInfo {
                         handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: weightsInfo.dimensionAnchor,

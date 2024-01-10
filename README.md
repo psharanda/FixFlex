@@ -7,7 +7,7 @@
 ## Features
 
 - Auto Layout code that is easy to write, read, and modify
-- Simple API with 2 functions and 4 modifiers
+- Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
 - Lightweight, implementation is only 300 lines of code
 - Compatible with any other Auto Layout code
 - Basically generates a bunch of `NSLayoutConstraint` and `UILayoutGuide`
@@ -26,7 +26,7 @@ Imagine we want to create a layout like this:
         width="200"
       />
 
-1. Let's 'scan' the layout horizontally and translate it into FixFlex code:
+1. Let's scan the layout horizontally and translate it into FixFlex code:
 
 <img
         class="snapshot"
@@ -34,19 +34,19 @@ Imagine we want to create a layout like this:
         width="400"
       />
 
-The title and subtitle widths can vary on different devices, which is why we use the Flex intent for them:
+Most of the views and spacings have a fixed width (`Fix`), while the title and subtitle widths are flexible, designed to occupy the remaining space (`Flex`):
 
 ```swift
-parent.fx.hput(Fix(10),
+parent.fx.hput(Fix(15),
                Fix(iconView, 44),
-               Fix(5),
+               Fix(15),
                Flex([titleLabel, subtitleLabel]),
-               Fix(5),
+               Fix(15),
                Fix(chevron, 20),
-               Fix(10))
+               Fix(15))
 ```
 
-2. Vertically, we have three different groups of views. Let's start with the icon:
+2. Vertically, we have three distinct groups of views. Starting with the icon:
 
 <img
         class="snapshot"
@@ -54,15 +54,15 @@ parent.fx.hput(Fix(10),
         width="400"
       />
 
-We pin `iconView` to the top of the parent with an offset of 5pt. The bottom padding is at least 5pt, but can be more (for the case when the labels' height + 5 is less than the icon's height):
+We do a spacing at the top using `Fix`. The bottom spacing should be at least 15pt, for the case when the labels' height is less than the icon's height:
 
 ```swift
-parent.fx.vput(Fix(5),
+parent.fx.vput(Fix(15),
                Fix(iconView, 44),
-               Flex(min: 5))
+               Flex(min: 15))
 ```
 
-3. Next is the vertical scan of the title and subtitle:
+3. Next, we perform a vertical scan of the title and subtitle:
 
 <img
         class="snapshot"
@@ -71,14 +71,13 @@ parent.fx.vput(Fix(5),
       />
 
 ```swift
-parent.fx.vput(Fix(5),
+parent.fx.vput(Fix(15),
                Flex(titleLabel),
-               Fix(5),
                Flex(subtitleLabel),
-               Fix(5))
+               Fix(15))
 ```
 
-4. Finally, the vertical scan of the chevron:
+4. Finally, we scan the chevron vertically:
 
 <img
         class="snapshot"
@@ -86,29 +85,96 @@ parent.fx.vput(Fix(5),
         width="400"
       />
 
-To center the chevron, the top padding should be equal to the bottom one. We use Split for this:
+To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Split`:
 
 ```swift
 parent.fx.vput(Split(),
-               Fix(chevron, 20),
+               Fix(chevron, 30),
                Split())
 ```
 
 ## API
 
-`FixFlex` provides two functions for laying out UIViews or NSViews, accessible through the 'fx' namespace.
+### hput/vput
 
-- `view.fx.hput(...)`: handles the horizontal layout of views
-- `view.fx.vput(...)`: handles the vertical layout of views
+`FixFlex` provides two functions for laying out views horizontally (`hput`) and vertically (`vput`), accessible through the `view.fx.*` namespace. 
 
-Both `hput` and `vput` process an array of `PutIntent`. A `PutIntent` is essentially an instruction on how to calculate the width or height for a view, an array of views, or a spacer (a UILayoutGuide is created for a `PutIntent` with a not specified view).
+You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. 
 
-`PutIntent` types:
+By default, `hput` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left (RTL) languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hput` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
 
-- `Fix`: This is used when you know the exact size of the view/spacer.
-- `Flex`: This is particularly useful for view/spacer whose size may change dynamically based on content. It can also have minimum or maximum value constraints.
-- `Split`: This is used when you want the size of one view/spacer to be the same as another. It's typically used for equal spacing or for creating symmetrical layouts.
-- `Match`: The size will match some other NSLayoutDimension. This is useful when you want to align the sizes of different view/spacer or make them proportional to each other.
+```swift
+func hput(
+        startAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use leadingAnchor or leftAnchor
+        endAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use trailingAnchor or rightAnchor
+        useAbsolutePositioning: Bool = false, // if true, we use leftAnchor/rightAnchor based positioning (force Left-To-Right)
+        _ intents: PutIntent...
+    ) -> PutResult
+```
+
+```swift
+func vput(
+        startAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use topAnchor
+        endAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use bottomAnchor
+        _ intents: PutIntent...
+    ) -> PutResult
+```
+
+A `PutIntent` is essentially an instruction for calculating the width or height of:
+
+- a spacer (for which a `UILayoutGuide` is created behind the scenes)
+- a view
+- an array of views (when they are aligned in parallel)
+
+`PutIntent` specifiers:
+
+### Fix
+
+Used for specifying the exact size of a view/spacer.
+
+```swift
+func Fix(_ value: CGFloat) -> PutIntent
+
+func Fix(_ view: _View, _ value: CGFloat) -> PutIntent
+
+func Fix(_ views: [_View], _ value: CGFloat) -> PutIntent
+```
+
+### Flex
+
+Useful for sizes that change dynamically. Optionally, it is possible to specify min/max constraints and in-place priority settings for hugging and compression resistance.
+
+```swift
+func Flex(min: CGFloat? = nil, max: CGFloat? = nil) -> PutIntent
+
+func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent
+
+func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent
+```
+
+### Split
+
+This is used when you want the size of one view/spacer to be the same as another. It's typically used for equal spacing e.g to center something, or for creating symmetrical layouts e.g table or grid. `Split` operates using weights; the greater the weight, the more space will be occupied.
+
+```swift
+func Split(weight: CGFloat = 1.0) -> PutIntent
+
+func Split(_ view: _View, weight: CGFloat = 1.0) -> PutIntent
+
+func Split(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent
+```
+
+### Match
+
+This is used to match the size of a view or spacer to a specified `NSLayoutDimension`. It is particularly useful for aligning the sizes of different views or spacers, or for making their sizes proportional to each other.
+
+```swift
+public func Match(dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent
+
+public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent
+
+public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent
+```
 
 ## Examples
 
@@ -135,8 +201,13 @@ parent.addSubview(child)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-parent.fx.hput(Fix(15), Flex(child), Fix(15))
-parent.fx.vput(Fix(15), Flex(child), Fix(15))
+parent.fx.hput(Fix(15),
+               Flex(child),
+               Fix(15))
+
+parent.fx.vput(Fix(15),
+               Flex(child),
+               Fix(15))
 ```
 
 
@@ -321,26 +392,25 @@ parent.addSubview(chevron)
 
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
-parent.fx.hput(Fix(10),
+parent.fx.hput(Fix(15),
                Fix(iconView, 44),
-               Fix(10),
+               Fix(15),
                Flex([titleLabel, subtitleLabel]),
-               Fix(10),
+               Fix(15),
                Fix(chevron, 20),
-               Fix(10))
+               Fix(15))
 
-parent.fx.vput(Fix(5),
+parent.fx.vput(Fix(15),
                Fix(iconView, 44),
-               Flex(min: 5))
+               Flex(min: 15))
 
-parent.fx.vput(Fix(5),
+parent.fx.vput(Fix(15),
                Flex(titleLabel),
-               Fix(5),
                Flex(subtitleLabel),
-               Fix(5))
+               Fix(15))
 
 parent.fx.vput(Split(),
-               Fix(chevron, 20),
+               Fix(chevron, 30),
                Split())
 ```
 
@@ -447,20 +517,20 @@ parent.fx.hput(Flex(leftLabel, compressionResistancePriority: .required),
 
 ```swift
 let label1 = UILabel()
-label1.text = "1) label"
-label1.font = .preferredFont(forTextStyle: .title1)
+label1.text = "L1"
+label1.font = .preferredFont(forTextStyle: .title3)
 label1.adjustsFontForContentSizeCategory = true
 label1.backgroundColor = .systemYellow
 
 let label2 = UILabel()
-label2.text = "2) label"
-label2.font = .preferredFont(forTextStyle: .title1)
+label2.text = "L2"
+label2.font = .preferredFont(forTextStyle: .title3)
 label2.adjustsFontForContentSizeCategory = true
 label2.backgroundColor = .systemOrange
 
 let label3 = UILabel()
-label3.text = "3) label"
-label3.font = .preferredFont(forTextStyle: .title1)
+label3.text = "L3"
+label3.font = .preferredFont(forTextStyle: .title3)
 label3.adjustsFontForContentSizeCategory = true
 label3.backgroundColor = .systemBrown
 
