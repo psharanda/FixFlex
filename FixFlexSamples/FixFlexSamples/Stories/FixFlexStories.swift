@@ -22,7 +22,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.fx.hput(Fix(15),
                        Flex(child),
                        Fix(15))
-        
+
         parent.fx.vput(Fix(15),
                        Flex(child),
                        Fix(15))
@@ -65,13 +65,13 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-        parent.fx.hput(Split(),
+        parent.fx.hput(Grow(),
                        Fix(child, 100),
-                       Split())
+                       Grow())
 
-        parent.fx.vput(Split(),
+        parent.fx.vput(Grow(),
                        Fix(child, 50),
-                       Split())
+                       Grow())
 
         return parent
     }
@@ -91,13 +91,13 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-        parent.fx.hput(Split(),
+        parent.fx.hput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
-        parent.fx.vput(Split(),
+        parent.fx.vput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
         return parent
     }
@@ -126,11 +126,11 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.fx.hput(Flex([topLabel, bottomLabel]))
 
-        parent.fx.vput(Split(),
+        parent.fx.vput(Grow(),
                        Flex(topLabel),
                        Fix(5),
                        Flex(bottomLabel),
-                       Split())
+                       Grow())
 
         return parent
     }
@@ -150,7 +150,7 @@ class FixFlexStories: DynamicComponentStories {
         subtitleLabel.font = .preferredFont(forTextStyle: .body)
         subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.backgroundColor = .systemOrange
-        
+
         let chevron = UIView()
         chevron.backgroundColor = .systemBlue
 
@@ -176,15 +176,15 @@ class FixFlexStories: DynamicComponentStories {
         parent.fx.vput(Fix(15),
                        Fix(iconView, 44),
                        Flex(min: 15))
-        
+
         parent.fx.vput(Fix(15),
                        Flex(titleLabel),
                        Flex(subtitleLabel),
                        Fix(15))
-        
-        parent.fx.vput(Split(),
+
+        parent.fx.vput(Grow(),
                        Fix(chevron, 30),
-                       Split())
+                       Grow())
 
         return parent
     }
@@ -294,11 +294,11 @@ class FixFlexStories: DynamicComponentStories {
                        Fix(5))
 
         parent.fx.hput(Fix(5),
-                       Split(label1),
+                       Grow(label1, weight: 2),
                        Fix(5),
-                       Split(label2),
+                       Grow(label2),
                        Fix(5),
-                       Split(label3),
+                       Grow(label3),
                        Fix(5))
 
         return parent
@@ -380,9 +380,9 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.fx.vput(Flex([label, leadingView, trailingView]))
 
-        parent.fx.hput(Split(),
+        parent.fx.hput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
         parent.fx.hput(startAnchor: label.leadingAnchor,
                        endAnchor: label.trailingAnchor,
@@ -417,9 +417,9 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.fx.vput(Flex([label, leadingView, trailingView]))
 
-        parent.fx.hput(Split(),
+        parent.fx.hput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
         parent.fx.hput(startAnchor: label.leftAnchor,
                        endAnchor: label.rightAnchor,
@@ -451,13 +451,13 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-        parent.fx.vput(Split(),
+        parent.fx.vput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
-        parent.fx.hput(Split(),
+        parent.fx.hput(Grow(),
                        Flex(label),
-                       Split())
+                       Grow())
 
         parent.fx.vput(startAnchor: label.topAnchor,
                        Fix(10),

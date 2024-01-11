@@ -76,13 +76,15 @@ parent.fx.vput(Fix(15),
      width="400"
 />
 
-To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Split`:
+To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Grow`:
 
 ```swift
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Fix(chevron, 30),
-               Split())
+               Grow())
 ```
+
+That's it! The best part is how easy it is to modify FixFlex layout code, inserting extra padding or views effortlessly, without the need to rewire constraints.
 
 ## API
 
@@ -117,7 +119,7 @@ A `PutIntent` is essentially an instruction for calculating the width or height 
 - a view
 - an array of views (when they are aligned in parallel)
 
-`PutIntent` specifiers:
+Concrete instances of `PutIntent` can be created using specialized builder functions:
 
 ### Fix
 
@@ -143,16 +145,16 @@ func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriori
 func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent
 ```
 
-### Split
+### Grow
 
-This is used when you want the size of one view/spacer to be the same as another. It's typically used for equal spacing e.g to center something, or for creating symmetrical layouts e.g table or grid. `Split` operates using weights; the greater the weight, the more space will be occupied.
+`Grow` allows a view/spacer to proportionally occupy the available free space based on its weight. It's particularly useful for achieving equal spacing, centering elements, or for designing symmetrical layouts like tables or grids.
 
 ```swift
-func Split(weight: CGFloat = 1.0) -> PutIntent
+func Grow(weight: CGFloat = 1.0) -> PutIntent
 
-func Split(_ view: _View, weight: CGFloat = 1.0) -> PutIntent
+func Grow(_ view: _View, weight: CGFloat = 1.0) -> PutIntent
 
-func Split(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent
+func Grow(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent
 ```
 
 ### Match

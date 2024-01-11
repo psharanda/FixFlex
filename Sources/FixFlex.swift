@@ -30,7 +30,7 @@ public struct PutIntent {
         case fix(value: CGFloat)
         case flex(min: CGFloat?, max: CGFloat?, huggingPriority: _LayoutPriority?, compressionResistancePriority: _LayoutPriority?)
         case match(dimension: NSLayoutDimension, multiplier: CGFloat?, offset: CGFloat?)
-        case split(weight: CGFloat)
+        case grow(weight: CGFloat)
     }
 
     let sizing: Sizing
@@ -86,18 +86,18 @@ public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CG
     return PutIntent(views: views, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
-/// Split shorthands
+/// Grow shorthands
 
-public func Split(weight: CGFloat = 1.0) -> PutIntent {
-    return PutIntent(views: nil, sizing: .split(weight: weight))
+public func Grow(weight: CGFloat = 1.0) -> PutIntent {
+    return PutIntent(views: nil, sizing: .grow(weight: weight))
 }
 
-public func Split(_ view: _View, weight: CGFloat = 1.0) -> PutIntent {
-    return Split([view], weight: weight)
+public func Grow(_ view: _View, weight: CGFloat = 1.0) -> PutIntent {
+    return Grow([view], weight: weight)
 }
 
-public func Split(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent {
-    return PutIntent(views: views, sizing: .split(weight: weight))
+public func Grow(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent {
+    return PutIntent(views: views, sizing: .grow(weight: weight))
 }
 
 /// Axis anchors abstraction
@@ -239,7 +239,7 @@ public extension FixFlexing {
                     }
                 case let .match(dimension, multiplier, offset):
                     handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: dimension, multiplier: multiplier ?? 1, constant: offset ?? 0))
-                case let .split(weight):
+                case let .grow(weight):
                     if let weightsInfo {
                         handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: weightsInfo.dimensionAnchor,
                                                                              multiplier: weight / weightsInfo.weight))

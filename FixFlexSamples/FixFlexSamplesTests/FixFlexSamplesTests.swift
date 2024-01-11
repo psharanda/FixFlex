@@ -65,7 +65,7 @@ class NativeBookSnapshotTestCase: FBSnapshotTestCase {
 
 final class FixFlexTests: NativeBookSnapshotTestCase {
     func test() {
-        //recordMode = true
+        // recordMode = true
         runTests(for: FixFlexStories())
     }
 }

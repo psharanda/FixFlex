@@ -76,13 +76,15 @@ parent.fx.vput(Fix(15),
      width="400"
 />
 
-To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Split`:
+To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Grow`:
 
 ```swift
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Fix(chevron, 30),
-               Split())
+               Grow())
 ```
+
+That's it! The best part is how easy it is to modify FixFlex layout code, inserting extra padding or views effortlessly, without the need to rewire constraints.
 
 ## API
 
@@ -117,7 +119,7 @@ A `PutIntent` is essentially an instruction for calculating the width or height 
 - a view
 - an array of views (when they are aligned in parallel)
 
-`PutIntent` specifiers:
+Concrete instances of `PutIntent` can be created using specialized builder functions:
 
 ### Fix
 
@@ -143,16 +145,16 @@ func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriori
 func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent
 ```
 
-### Split
+### Grow
 
-This is used when you want the size of one view/spacer to be the same as another. It's typically used for equal spacing e.g to center something, or for creating symmetrical layouts e.g table or grid. `Split` operates using weights; the greater the weight, the more space will be occupied.
+`Grow` allows a view/spacer to proportionally occupy the available free space based on its weight. It's particularly useful for achieving equal spacing, centering elements, or for designing symmetrical layouts like tables or grids.
 
 ```swift
-func Split(weight: CGFloat = 1.0) -> PutIntent
+func Grow(weight: CGFloat = 1.0) -> PutIntent
 
-func Split(_ view: _View, weight: CGFloat = 1.0) -> PutIntent
+func Grow(_ view: _View, weight: CGFloat = 1.0) -> PutIntent
 
-func Split(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent
+func Grow(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent
 ```
 
 ### Match
@@ -250,13 +252,13 @@ parent.addSubview(child)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-parent.fx.hput(Split(),
+parent.fx.hput(Grow(),
                Fix(child, 100),
-               Split())
+               Grow())
 
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Fix(child, 50),
-               Split())
+               Grow())
 ```
 
 
@@ -283,13 +285,13 @@ parent.addSubview(label)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-parent.fx.hput(Split(),
+parent.fx.hput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 ```
 
 
@@ -325,11 +327,11 @@ parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.hput(Flex([topLabel, bottomLabel]))
 
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Flex(topLabel),
                Fix(5),
                Flex(bottomLabel),
-               Split())
+               Grow())
 ```
 
 
@@ -388,9 +390,9 @@ parent.fx.vput(Fix(15),
                Flex(subtitleLabel),
                Fix(15))
 
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Fix(chevron, 30),
-               Split())
+               Grow())
 ```
 
 
@@ -521,11 +523,11 @@ parent.fx.vput(Fix(5),
                Fix(5))
 
 parent.fx.hput(Fix(5),
-               Split(label1),
+               Grow(label1, weight: 2),
                Fix(5),
-               Split(label2),
+               Grow(label2),
                Fix(5),
-               Split(label3),
+               Grow(label3),
                Fix(5))
 ```
 
@@ -621,9 +623,9 @@ parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.vput(Flex([label, leadingView, trailingView]))
 
-parent.fx.hput(Split(),
+parent.fx.hput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 
 parent.fx.hput(startAnchor: label.leadingAnchor,
                endAnchor: label.trailingAnchor,
@@ -665,9 +667,9 @@ parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.vput(Flex([label, leadingView, trailingView]))
 
-parent.fx.hput(Split(),
+parent.fx.hput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 
 parent.fx.hput(startAnchor: label.leftAnchor,
                endAnchor: label.rightAnchor,
@@ -706,13 +708,13 @@ parent.addSubview(label)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-parent.fx.vput(Split(),
+parent.fx.vput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 
-parent.fx.hput(Split(),
+parent.fx.hput(Grow(),
                Flex(label),
-               Split())
+               Grow())
 
 parent.fx.vput(startAnchor: label.topAnchor,
                Fix(10),
