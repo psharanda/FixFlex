@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1B0C13B12B4B556B00846DE4 /* FixFlex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C13B02B4B556B00846DE4 /* FixFlex.swift */; };
 		1B0C13B42B4B5F3200846DE4 /* SwiftUIKitView in Frameworks */ = {isa = PBXBuildFile; productRef = 1B0C13B32B4B5F3200846DE4 /* SwiftUIKitView */; };
+		1B0C13F42B50873F00846DE4 /* FixFlex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B0C13F32B50870E00846DE4 /* FixFlex.swift */; };
 		1B30096D2B1C97A600EA8644 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B30096C2B1C97A600EA8644 /* Base.swift */; };
 		1B30096F2B1CA61400EA8644 /* StoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B30096E2B1CA61400EA8644 /* StoryViewController.swift */; };
 		1B3009712B1CAF0600EA8644 /* FixFlexStories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3009702B1CAF0600EA8644 /* FixFlexStories.swift */; };
@@ -48,7 +48,7 @@
 
 /* Begin PBXFileReference section */
 		1B096F132B1C0C6600450122 /* FixFlexSamples.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = FixFlexSamples.xctestplan; sourceTree = "<group>"; };
-		1B0C13B02B4B556B00846DE4 /* FixFlex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FixFlex.swift; sourceTree = "<group>"; };
+		1B0C13F32B50870E00846DE4 /* FixFlex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixFlex.swift; sourceTree = "<group>"; };
 		1B30096C2B1C97A600EA8644 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
 		1B30096E2B1CA61400EA8644 /* StoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryViewController.swift; sourceTree = "<group>"; };
 		1B3009702B1CAF0600EA8644 /* FixFlexStories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixFlexStories.swift; sourceTree = "<group>"; };
@@ -83,13 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1B0C13AF2B4B556B00846DE4 /* Sources */ = {
+		1B0C13F22B50870E00846DE4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				1B0C13B02B4B556B00846DE4 /* FixFlex.swift */,
+				1B0C13F32B50870E00846DE4 /* FixFlex.swift */,
 			);
-			path = Sources;
-			sourceTree = SOURCE_ROOT;
+			name = Sources;
+			path = ../Sources;
+			sourceTree = "<group>";
 		};
 		1B3009722B1CAF1F00EA8644 /* Stories */ = {
 			isa = PBXGroup;
@@ -112,6 +113,7 @@
 		1BDD347C2B1BC3A300B19632 = {
 			isa = PBXGroup;
 			children = (
+				1B0C13F22B50870E00846DE4 /* Sources */,
 				1B096F132B1C0C6600450122 /* FixFlexSamples.xctestplan */,
 				1BDD34872B1BC3A300B19632 /* FixFlexSamples */,
 				1BDD349E2B1BC3A500B19632 /* FixFlexSamplesTests */,
@@ -132,7 +134,6 @@
 		1BDD34872B1BC3A300B19632 /* FixFlexSamples */ = {
 			isa = PBXGroup;
 			children = (
-				1B0C13AF2B4B556B00846DE4 /* Sources */,
 				1B3009732B1CAFCA00EA8644 /* Core */,
 				1B3009722B1CAF1F00EA8644 /* Stories */,
 				1BDD348A2B1BC3A300B19632 /* SceneDelegate.swift */,
@@ -273,7 +274,7 @@
 				1B30096F2B1CA61400EA8644 /* StoryViewController.swift in Sources */,
 				1B3009712B1CAF0600EA8644 /* FixFlexStories.swift in Sources */,
 				1BDD348D2B1BC3A300B19632 /* StorybookViewController.swift in Sources */,
-				1B0C13B12B4B556B00846DE4 /* FixFlex.swift in Sources */,
+				1B0C13F42B50873F00846DE4 /* FixFlex.swift in Sources */,
 				1BDD34892B1BC3A300B19632 /* AppDelegate.swift in Sources */,
 				1B30096D2B1C97A600EA8644 /* Base.swift in Sources */,
 				1BDD348B2B1BC3A300B19632 /* SceneDelegate.swift in Sources */,

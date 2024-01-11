@@ -1,10 +1,10 @@
 {
-  "name": "native_book_gen",
+  "name": "fixflex-scripts",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "native-book-gen": "npx ts-node ./src/NativeBookGen.ts"
+    "generate-readme": "npx ts-node ./src/GenerateReadme.ts"
   },
   "keywords": [],
   "author": "",

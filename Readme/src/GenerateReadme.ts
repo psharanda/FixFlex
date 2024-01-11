@@ -3,7 +3,7 @@ import * as ejs from "ejs";
 import * as imageSize from "image-size";
 
 const repoRoot = __dirname + "/../../";
-const readmePath = repoRoot + `/README.md`;
+const readmePath = repoRoot + `README.md`;
 
 function pascalCaseToWords(input: string): string {
   return input.replace(/([A-Z][a-z]+)/g, (match, p1, offset) =>
@@ -18,11 +18,6 @@ interface Story {
   imageName: string;
   imageWidth: number;
   imageHeight: number;
-}
-
-interface Component {
-  name: string;
-  stories: Story[];
 }
 
 function formatMultilineString(input: string): string {
@@ -79,39 +74,20 @@ function storiesFromFile(
   return result;
 }
 
-function renderReadme(component: Component) {
-  fs.writeFileSync(
-    repoRoot + `/README.md`,
-    ejs.render(fs.readFileSync(__dirname + "/templates/README.md", "utf-8"), {
-      component: component,
-    })
-  );
-}
-
 (function () {
-  // load config
-  const nativeBookConfigContents = fs.readFileSync(
-    repoRoot + "native_book_config.json",
-    "utf-8"
+  const stories: Story[] = storiesFromFile(
+    "FixFlexSamples/FixFlexSamples/Stories/FixFlexStories.swift",
+    "FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests"
   );
 
-  const config = JSON.parse(nativeBookConfigContents);
-
-  // gather information for a component
-  const components: Component[] = [];
-  for (const componentJson of config["components"]) {
-    components.push({
-      name: componentJson["name"],
-      stories: storiesFromFile(
-        componentJson["storiesFilePath"],
-        componentJson["snapshotsFolderPath"]
-      ),
-    });
-  }
-
-  // prepare site folder
   if (fs.existsSync(readmePath)) {
     fs.rmSync(readmePath);
   }
-  renderReadme(components[0]);
+
+  fs.writeFileSync(
+    readmePath,
+    ejs.render(fs.readFileSync(__dirname + "/templates/README.md", "utf-8"), {
+      stories: stories,
+    })
+  );
 })();

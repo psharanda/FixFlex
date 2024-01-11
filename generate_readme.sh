@@ -1,3 +1,3 @@
-cd native_book_gen
+cd Readme
 npm install
-npm run native-book-gen
+npm run generate-readme

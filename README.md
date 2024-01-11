@@ -1,5 +1,5 @@
 <p align="center">
-<img src="Readme/logo.png" width="50%" alt="RxSwift Logo" />
+<img src="Readme/static/logo.png" width="50%" alt="FixFlex Logo" />
 </p>
       
 `FixFlex` is a simple yet powerful Auto Layout library built on top of the NSLayoutAnchor API, a swifty and type-safe reimagination of [Visual Format Language](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html)
@@ -20,19 +20,15 @@
 
 Imagine we want to create a layout like this:
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CellWithIconTitleSubtitleAndChevron__default@3x.png"
-        width="200"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CellWithIconTitleSubtitleAndChevron__default@3x.png"
+     width="200"/>
 
 1. Let's scan the layout horizontally and translate it into FixFlex code:
 
-<img
-        class="snapshot"
-        src="Readme/hput.png"
-        width="400"
-      />
+<img class="snapshot"
+     src="Readme/static/hput.png"
+     width="400"/>
 
 Most of the views and spacings have a fixed width (`Fix`), while the title and subtitle widths are flexible, designed to occupy the remaining space (`Flex`):
 
@@ -48,11 +44,9 @@ parent.fx.hput(Fix(15),
 
 2. Vertically, we have three distinct groups of views. Starting with the icon:
 
-<img
-        class="snapshot"
-        src="Readme/vput1.png"
-        width="400"
-      />
+<img class="snapshot"
+     src="Readme/static/vput1.png"
+     width="400"/>
 
 We do a spacing at the top using `Fix`. The bottom spacing should be at least 15pt, for the case when the labels' height is less than the icon's height:
 
@@ -64,11 +58,9 @@ parent.fx.vput(Fix(15),
 
 3. Next, we perform a vertical scan of the title and subtitle:
 
-<img
-        class="snapshot"
-        src="Readme/vput2.png"
-        width="400"
-      />
+<img class="snapshot"
+     src="Readme/static/vput2.png"
+     width="400"/>
 
 ```swift
 parent.fx.vput(Fix(15),
@@ -79,11 +71,10 @@ parent.fx.vput(Fix(15),
 
 4. Finally, we scan the chevron vertically:
 
-<img
-        class="snapshot"
-        src="Readme/vput3.png"
-        width="400"
-      />
+<img class="snapshot"
+     src="Readme/static/vput3.png"
+     width="400"
+/>
 
 To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Split`:
 
@@ -97,9 +88,9 @@ parent.fx.vput(Split(),
 
 ### hput/vput
 
-`FixFlex` provides two functions for laying out views horizontally (`hput`) and vertically (`vput`), accessible through the `view.fx.*` namespace. 
+`FixFlex` provides two functions for laying out views horizontally (`hput`) and vertically (`vput`), accessible through the `view.fx.*` namespace.
 
-You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. 
+You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges.
 
 By default, `hput` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left (RTL) languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hput` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
 
@@ -182,12 +173,10 @@ public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CG
 
 ### Fill Parent With Inset
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FillParentWithInset__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FillParentWithInset__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let child = UIView()
@@ -214,12 +203,10 @@ parent.fx.vput(Fix(15),
 
 ### Pin To Parent Trailing Bottom
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PinToParentTrailingBottom__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PinToParentTrailingBottom__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let child = UIView()
@@ -246,12 +233,10 @@ parent.fx.vput(Flex(),
 
 ### Center In Parent
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterInParent__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterInParent__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let child = UIView()
@@ -278,12 +263,10 @@ parent.fx.vput(Split(),
 
 ### Center Label In Parent
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterLabelInParent__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterLabelInParent__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label = UILabel()
@@ -313,12 +296,10 @@ parent.fx.vput(Split(),
 
 ### Vertically Center Two Labels
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_VerticallyCenterTwoLabels__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_VerticallyCenterTwoLabels__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let topLabel = UILabel()
@@ -355,12 +336,10 @@ parent.fx.vput(Split(),
 
 ### Cell With Icon Title Subtitle And Chevron
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CellWithIconTitleSubtitleAndChevron__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CellWithIconTitleSubtitleAndChevron__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let iconView = UIView()
@@ -418,12 +397,10 @@ parent.fx.vput(Split(),
 
 ### Card With Icon Title And Subtitle
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CardWithIconTitleAndSubtitle__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CardWithIconTitleAndSubtitle__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let iconView = UIView()
@@ -469,12 +446,10 @@ parent.fx.vput(Fix(5),
 
 ### Labels Row With Not Enough Space For Both
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsRowWithNotEnoughSpaceForBoth__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsRowWithNotEnoughSpaceForBoth__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let leftLabel = UILabel()
@@ -508,12 +483,10 @@ parent.fx.hput(Flex(leftLabel, compressionResistancePriority: .required),
 
 ### Labels Split
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsSplit__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsSplit__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label1 = UILabel()
@@ -560,12 +533,10 @@ parent.fx.hput(Fix(5),
 
 ### Flex Min Max
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FlexMinMax__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FlexMinMax__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label1 = UILabel()
@@ -621,12 +592,10 @@ parent.fx.hput(Fix(5),
 
 ### Put Between Anchors
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchors__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchors__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label = UILabel()
@@ -667,12 +636,10 @@ parent.fx.hput(startAnchor: label.leadingAnchor,
 
 ### Put Between Anchors Absolute
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchorsAbsolute__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchorsAbsolute__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label = UILabel()
@@ -714,12 +681,10 @@ parent.fx.hput(startAnchor: label.leftAnchor,
 
 ### Shadow Using Match
 
-<img
-        class="snapshot"
-        src="Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_ShadowUsingMatch__default@3x.png"
-        width="200"
-        align="left"
-      />
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_ShadowUsingMatch__default@3x.png"
+     width="200"
+     align="left"/>
 
 ```swift
 let label = UILabel()
