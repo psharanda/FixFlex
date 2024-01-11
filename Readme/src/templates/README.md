@@ -10,9 +10,10 @@
 - Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
 - Lightweight, implementation is only 300 lines of code
 - Compatible with any other Auto Layout code
-- Basically generates a bunch of `NSLayoutConstraint` and `UILayoutGuide`
+- Basically generates a bunch of activated `NSLayoutConstraint` and `UILayoutGuide`
 - Super straightforward mental model
 - Typesafe alternative to VFL
+- Dynamic Type and Right-To-Left friendly
 - Automatically sets `translatesAutoresizingMaskIntoConstraints` to false
 - Supports iOS 12.0+ / Mac OS X 10.13+ / tvOS 12.0+
 
@@ -92,14 +93,16 @@ That's it! The best part is how easy it is to modify FixFlex layout code, insert
 
 `FixFlex` provides two functions for laying out views horizontally (`hput`) and vertically (`vput`), accessible through the `view.fx.*` namespace.
 
-You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges.
+You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. `startOffset`/`endOffset` are used to add spacing or offsets from the `startAnchor` and `endAnchor` respectively.
 
-By default, `hput` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left (RTL) languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hput` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
+By default, `hput` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hput` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
 
 ```swift
 func hput(
         startAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use leadingAnchor or leftAnchor
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use trailingAnchor or rightAnchor
+        endOffset: CGFloat = 0,
         useAbsolutePositioning: Bool = false, // if true, we use leftAnchor/rightAnchor based positioning (force Left-To-Right)
         _ intents: PutIntent...
     ) -> PutResult
@@ -108,7 +111,9 @@ func hput(
 ```swift
 func vput(
         startAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use topAnchor
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use bottomAnchor
+        endOffset: CGFloat = 0,
         _ intents: PutIntent...
     ) -> PutResult
 ```

@@ -176,10 +176,12 @@ public struct PutResult {
 
 public extension FixFlexing {
     private func _put<AnchorType: AnyObject, AxisAnchorsBuilderType: AxisAnchorsBuilder>(
-        _ intents: [PutIntent],
-        builder: AxisAnchorsBuilderType,
         startAnchor: NSLayoutAnchor<AnchorType>,
-        endAnchor: NSLayoutAnchor<AnchorType>
+        startOffset: CGFloat,
+        endAnchor: NSLayoutAnchor<AnchorType>,
+        endOffset: CGFloat,
+        builder: AxisAnchorsBuilderType,
+        intents: [PutIntent]
     ) -> PutResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
         var lastAnchors = [startAnchor]
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
@@ -206,7 +208,8 @@ public extension FixFlexing {
 
             for aa in aas {
                 for lastAnchor in lastAnchors {
-                    constraints.append(aa.startAnchor.constraint(equalTo: lastAnchor))
+                    constraints.append(aa.startAnchor.constraint(equalTo: lastAnchor,
+                                                                 constant: lastAnchor === startAnchor ? startOffset : 0))
                 }
 
                 func handleSizingConstraint(_ constraint: NSLayoutConstraint) {
@@ -252,7 +255,7 @@ public extension FixFlexing {
         }
 
         lastAnchors.forEach {
-            constraints.append($0.constraint(equalTo: endAnchor))
+            constraints.append($0.constraint(equalTo: endAnchor, constant: endOffset))
         }
 
         NSLayoutConstraint.activate(constraints)
@@ -263,44 +266,65 @@ public extension FixFlexing {
     @discardableResult
     func hput(
         startAnchor: NSLayoutXAxisAnchor? = nil,
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
+        endOffset: CGFloat = 0,
         useAbsolutePositioning: Bool = false,
         _ intents: [PutIntent]
     ) -> PutResult {
-        return _put(intents,
+        return _put(startAnchor: startAnchor ?? (useAbsolutePositioning ? base.leftAnchor : base.leadingAnchor),
+                    startOffset: startOffset,
+                    endAnchor: endAnchor ?? (useAbsolutePositioning ? base.rightAnchor : base.trailingAnchor),
+                    endOffset: endOffset,
                     builder: XAxisAnchorsBuilder(useAbsolutePositioning: useAbsolutePositioning),
-                    startAnchor: startAnchor ?? (useAbsolutePositioning ? base.leftAnchor : base.leadingAnchor),
-                    endAnchor: endAnchor ?? (useAbsolutePositioning ? base.rightAnchor : base.trailingAnchor))
+                    intents: intents)
     }
 
     @discardableResult
     func hput(
         startAnchor: NSLayoutXAxisAnchor? = nil,
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
+        endOffset: CGFloat = 0,
         useAbsolutePositioning: Bool = false,
         _ intents: PutIntent...
     ) -> PutResult {
-        return hput(startAnchor: startAnchor, endAnchor: endAnchor, useAbsolutePositioning: useAbsolutePositioning, intents)
+        return hput(startAnchor: startAnchor,
+                    startOffset: startOffset,
+                    endAnchor: endAnchor,
+                    endOffset: endOffset,
+                    useAbsolutePositioning: useAbsolutePositioning,
+                    intents)
     }
 
     @discardableResult
     func vput(
         startAnchor: NSLayoutYAxisAnchor? = nil,
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
+        endOffset: CGFloat = 0,
         _ intents: [PutIntent]
     ) -> PutResult {
-        return _put(intents,
+        return _put(startAnchor: startAnchor ?? base.topAnchor,
+                    startOffset: startOffset,
+                    endAnchor: endAnchor ?? base.bottomAnchor,
+                    endOffset: endOffset,
                     builder: YAxisAnchorsBuilder(),
-                    startAnchor: startAnchor ?? base.topAnchor,
-                    endAnchor: endAnchor ?? base.bottomAnchor)
+                    intents: intents)
     }
 
     @discardableResult
     func vput(
         startAnchor: NSLayoutYAxisAnchor? = nil,
+        startOffset: CGFloat = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
+        endOffset: CGFloat = 0,
         _ intents: PutIntent...
     ) -> PutResult {
-        return vput(startAnchor: startAnchor, endAnchor: endAnchor, intents)
+        return vput(startAnchor: startAnchor,
+                    startOffset: startOffset,
+                    endAnchor: endAnchor,
+                    endOffset: endOffset,
+                    intents)
     }
 }
