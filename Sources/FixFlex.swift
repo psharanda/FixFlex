@@ -23,7 +23,7 @@ public extension _View {
     }
 }
 
-public struct PutIntent {
+public struct SizingIntent {
     let views: [_View]?
 
     enum Sizing {
@@ -37,7 +37,7 @@ public struct PutIntent {
 
     var onCreateDimensionConstraint: ((NSLayoutConstraint) -> Void)?
 
-    public func onCreateDimensionConstraint(_ block: @escaping (NSLayoutConstraint) -> Void) -> PutIntent {
+    public func onCreateDimensionConstraint(_ block: @escaping (NSLayoutConstraint) -> Void) -> SizingIntent {
         var newSelf = self
         newSelf.onCreateDimensionConstraint = block
         return newSelf
@@ -46,58 +46,58 @@ public struct PutIntent {
 
 /// Fix shorthands
 
-public func Fix(_ value: CGFloat) -> PutIntent {
-    return PutIntent(views: nil, sizing: .fix(value: value))
+public func Fix(_ value: CGFloat) -> SizingIntent {
+    return SizingIntent(views: nil, sizing: .fix(value: value))
 }
 
-public func Fix(_ view: _View, _ value: CGFloat) -> PutIntent {
+public func Fix(_ view: _View, _ value: CGFloat) -> SizingIntent {
     return Fix([view], value)
 }
 
-public func Fix(_ views: [_View], _ value: CGFloat) -> PutIntent {
-    return PutIntent(views: views, sizing: .fix(value: value))
+public func Fix(_ views: [_View], _ value: CGFloat) -> SizingIntent {
+    return SizingIntent(views: views, sizing: .fix(value: value))
 }
 
 /// Flex shorthands
 
-public func Flex(min: CGFloat? = nil, max: CGFloat? = nil) -> PutIntent {
-    return PutIntent(views: nil, sizing: .flex(min: min, max: max, huggingPriority: .required, compressionResistancePriority: .required))
+public func Flex(min: CGFloat? = nil, max: CGFloat? = nil) -> SizingIntent {
+    return SizingIntent(views: nil, sizing: .flex(min: min, max: max, huggingPriority: .required, compressionResistancePriority: .required))
 }
 
-public func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent {
+public func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> SizingIntent {
     return Flex([view], min: min, max: max, huggingPriority: huggingPriority, compressionResistancePriority: compressionResistancePriority)
 }
 
-public func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> PutIntent {
-    return PutIntent(views: views, sizing: .flex(min: min, max: max, huggingPriority: huggingPriority, compressionResistancePriority: compressionResistancePriority))
+public func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> SizingIntent {
+    return SizingIntent(views: views, sizing: .flex(min: min, max: max, huggingPriority: huggingPriority, compressionResistancePriority: compressionResistancePriority))
 }
 
 /// Match shorthands
 
-public func Match(dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
-    return PutIntent(views: nil, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
+public func Match(dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent {
+    return SizingIntent(views: nil, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
-public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
+public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent {
     return Match([view], dimension: dimension, multiplier: multiplier, offset: offset)
 }
 
-public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> PutIntent {
-    return PutIntent(views: views, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
+public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent {
+    return SizingIntent(views: views, sizing: .match(dimension: dimension, multiplier: multiplier, offset: offset))
 }
 
 /// Grow shorthands
 
-public func Grow(weight: CGFloat = 1.0) -> PutIntent {
-    return PutIntent(views: nil, sizing: .grow(weight: weight))
+public func Grow(weight: CGFloat = 1.0) -> SizingIntent {
+    return SizingIntent(views: nil, sizing: .grow(weight: weight))
 }
 
-public func Grow(_ view: _View, weight: CGFloat = 1.0) -> PutIntent {
+public func Grow(_ view: _View, weight: CGFloat = 1.0) -> SizingIntent {
     return Grow([view], weight: weight)
 }
 
-public func Grow(_ views: [_View], weight: CGFloat = 1.0) -> PutIntent {
-    return PutIntent(views: views, sizing: .grow(weight: weight))
+public func Grow(_ views: [_View], weight: CGFloat = 1.0) -> SizingIntent {
+    return SizingIntent(views: views, sizing: .grow(weight: weight))
 }
 
 /// Axis anchors abstraction
@@ -169,20 +169,20 @@ private struct YAxisAnchorsBuilder: AxisAnchorsBuilder {
     }
 }
 
-public struct PutResult {
+public struct StackingResult {
     public let constraints: [NSLayoutConstraint]
     public let layoutGuides: [_LayoutGuide]
 }
 
 public extension FixFlexing {
-    private func _put<AnchorType: AnyObject, AxisAnchorsBuilderType: AxisAnchorsBuilder>(
+    private func _stack<AnchorType: AnyObject, AxisAnchorsBuilderType: AxisAnchorsBuilder>(
         startAnchor: NSLayoutAnchor<AnchorType>,
         startOffset: CGFloat,
         endAnchor: NSLayoutAnchor<AnchorType>,
         endOffset: CGFloat,
         builder: AxisAnchorsBuilderType,
-        intents: [PutIntent]
-    ) -> PutResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
+        intents: [SizingIntent]
+    ) -> StackingResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
         var lastAnchors = [startAnchor]
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
         var constraints: [NSLayoutConstraint] = []
@@ -260,71 +260,71 @@ public extension FixFlexing {
 
         NSLayoutConstraint.activate(constraints)
 
-        return PutResult(constraints: constraints, layoutGuides: layoutGuides)
+        return StackingResult(constraints: constraints, layoutGuides: layoutGuides)
     }
 
     @discardableResult
-    func hput(
+    func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil,
         startOffset: CGFloat = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
         endOffset: CGFloat = 0,
         useAbsolutePositioning: Bool = false,
-        _ intents: [PutIntent]
-    ) -> PutResult {
-        return _put(startAnchor: startAnchor ?? (useAbsolutePositioning ? base.leftAnchor : base.leadingAnchor),
-                    startOffset: startOffset,
-                    endAnchor: endAnchor ?? (useAbsolutePositioning ? base.rightAnchor : base.trailingAnchor),
-                    endOffset: endOffset,
-                    builder: XAxisAnchorsBuilder(useAbsolutePositioning: useAbsolutePositioning),
-                    intents: intents)
+        _ intents: [SizingIntent]
+    ) -> StackingResult {
+        return _stack(startAnchor: startAnchor ?? (useAbsolutePositioning ? base.leftAnchor : base.leadingAnchor),
+                      startOffset: startOffset,
+                      endAnchor: endAnchor ?? (useAbsolutePositioning ? base.rightAnchor : base.trailingAnchor),
+                      endOffset: endOffset,
+                      builder: XAxisAnchorsBuilder(useAbsolutePositioning: useAbsolutePositioning),
+                      intents: intents)
     }
 
     @discardableResult
-    func hput(
+    func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil,
         startOffset: CGFloat = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
         endOffset: CGFloat = 0,
         useAbsolutePositioning: Bool = false,
-        _ intents: PutIntent...
-    ) -> PutResult {
-        return hput(startAnchor: startAnchor,
-                    startOffset: startOffset,
-                    endAnchor: endAnchor,
-                    endOffset: endOffset,
-                    useAbsolutePositioning: useAbsolutePositioning,
-                    intents)
+        _ intents: SizingIntent...
+    ) -> StackingResult {
+        return hstack(startAnchor: startAnchor,
+                      startOffset: startOffset,
+                      endAnchor: endAnchor,
+                      endOffset: endOffset,
+                      useAbsolutePositioning: useAbsolutePositioning,
+                      intents)
     }
 
     @discardableResult
-    func vput(
+    func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil,
         startOffset: CGFloat = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
         endOffset: CGFloat = 0,
-        _ intents: [PutIntent]
-    ) -> PutResult {
-        return _put(startAnchor: startAnchor ?? base.topAnchor,
-                    startOffset: startOffset,
-                    endAnchor: endAnchor ?? base.bottomAnchor,
-                    endOffset: endOffset,
-                    builder: YAxisAnchorsBuilder(),
-                    intents: intents)
+        _ intents: [SizingIntent]
+    ) -> StackingResult {
+        return _stack(startAnchor: startAnchor ?? base.topAnchor,
+                      startOffset: startOffset,
+                      endAnchor: endAnchor ?? base.bottomAnchor,
+                      endOffset: endOffset,
+                      builder: YAxisAnchorsBuilder(),
+                      intents: intents)
     }
 
     @discardableResult
-    func vput(
+    func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil,
         startOffset: CGFloat = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
         endOffset: CGFloat = 0,
-        _ intents: PutIntent...
-    ) -> PutResult {
-        return vput(startAnchor: startAnchor,
-                    startOffset: startOffset,
-                    endAnchor: endAnchor,
-                    endOffset: endOffset,
-                    intents)
+        _ intents: SizingIntent...
+    ) -> StackingResult {
+        return vstack(startAnchor: startAnchor,
+                      startOffset: startOffset,
+                      endAnchor: endAnchor,
+                      endOffset: endOffset,
+                      intents)
     }
 }
