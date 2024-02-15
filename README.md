@@ -77,12 +77,12 @@ parent.fx.vstack(Fix(15),
      width="400"
 />
 
-To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Grow`:
+To center the chevron, we ensure the top spacing is equal to the bottom spacing using `Fill`:
 
 ```swift
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Fix(chevron, 30),
-                 Grow())
+                 Fill())
 ```
 
 That's it! The best part is how easy it is to modify FixFlex layout code, inserting extra padding or views effortlessly, without the need to rewire constraints.
@@ -150,16 +150,16 @@ func Flex(_ view: _View, min: CGFloat? = nil, max: CGFloat? = nil, huggingPriori
 func Flex(_ views: [_View], min: CGFloat? = nil, max: CGFloat? = nil, huggingPriority: _LayoutPriority? = nil, compressionResistancePriority: _LayoutPriority? = nil) -> SizingIntent
 ```
 
-### Grow
+### Fill
 
-`Grow` allows a view/spacer to proportionally occupy the available free space based on its weight. It's particularly useful for achieving equal spacing, centering elements, or for designing symmetrical layouts like tables or grids.
+`Fill` allows a view/spacer to proportionally occupy the available free space based on its weight. It's particularly useful for achieving equal spacing, centering elements, or for designing symmetrical layouts like tables or grids.
 
 ```swift
-func Grow(weight: CGFloat = 1.0) -> SizingIntent
+func Fill(weight: CGFloat = 1.0) -> SizingIntent
 
-func Grow(_ view: _View, weight: CGFloat = 1.0) -> SizingIntent
+func Fill(_ view: _View, weight: CGFloat = 1.0) -> SizingIntent
 
-func Grow(_ views: [_View], weight: CGFloat = 1.0) -> SizingIntent
+func Fill(_ views: [_View], weight: CGFloat = 1.0) -> SizingIntent
 ```
 
 ### Match
@@ -257,13 +257,13 @@ parent.addSubview(child)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-parent.fx.hstack(Grow(),
+parent.fx.hstack(Fill(),
                  Fix(child, 100),
-                 Grow())
+                 Fill())
 
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Fix(child, 50),
-                 Grow())
+                 Fill())
 ```
 
 
@@ -290,13 +290,13 @@ parent.addSubview(label)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-parent.fx.hstack(Grow(),
+parent.fx.hstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 ```
 
 
@@ -332,11 +332,11 @@ parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.hstack(Flex([topLabel, bottomLabel]))
 
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Flex(topLabel),
                  Fix(5),
                  Flex(bottomLabel),
-                 Grow())
+                 Fill())
 ```
 
 
@@ -395,9 +395,9 @@ parent.fx.vstack(Fix(15),
                  Flex(subtitleLabel),
                  Fix(15))
 
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Fix(chevron, 30),
-                 Grow())
+                 Fill())
 ```
 
 
@@ -528,11 +528,11 @@ parent.fx.vstack(Fix(5),
                  Fix(5))
 
 parent.fx.hstack(Fix(5),
-                 Grow(label1, weight: 2),
+                 Fill(label1, weight: 2),
                  Fix(5),
-                 Grow(label2),
+                 Fill(label2),
                  Fix(5),
-                 Grow(label3),
+                 Fill(label3),
                  Fix(5))
 ```
 
@@ -628,9 +628,9 @@ parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
-parent.fx.hstack(Grow(),
+parent.fx.hstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 
 parent.fx.hstack(startAnchor: label.leadingAnchor,
                  endAnchor: label.trailingAnchor,
@@ -672,9 +672,9 @@ parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
-parent.fx.hstack(Grow(),
+parent.fx.hstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 
 parent.fx.hstack(startAnchor: label.leftAnchor,
                  endAnchor: label.rightAnchor,
@@ -713,13 +713,13 @@ parent.addSubview(label)
 parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-parent.fx.vstack(Grow(),
+parent.fx.vstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 
-parent.fx.hstack(Grow(),
+parent.fx.hstack(Fill(),
                  Flex(label),
-                 Grow())
+                 Fill())
 
 parent.fx.vstack(startAnchor: label.topAnchor,
                  Fix(10),
