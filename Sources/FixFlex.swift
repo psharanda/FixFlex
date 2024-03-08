@@ -1,10 +1,12 @@
 #if os(macOS)
     import AppKit
+
     public typealias _View = NSView
     public typealias _LayoutGuide = NSLayoutGuide
     public typealias _LayoutPriority = NSLayoutConstraint.Priority
 #else
     import UIKit
+
     public typealias _View = UIView
     public typealias _LayoutGuide = UILayoutGuide
     public typealias _LayoutPriority = UILayoutPriority
@@ -183,6 +185,11 @@ public extension FixFlexing {
         builder: AxisAnchorsBuilderType,
         intents: [SizingIntent]
     ) -> StackingResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
+        assert(intents.count > 0)
+
+        guard intents.count > 0 else {
+            return StackingResult(constraints: [], layoutGuides: [])
+        }
         var lastAnchors = [startAnchor]
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
         var constraints: [NSLayoutConstraint] = []
@@ -192,7 +199,7 @@ public extension FixFlexing {
             let aas: [AxisAnchors<AnchorType>]
 
             if let views = intent.views, views.count > 0 {
-                views.forEach { view in
+                for view in views {
                     view.translatesAutoresizingMaskIntoConstraints = false
                 }
 
@@ -243,19 +250,26 @@ public extension FixFlexing {
                 case let .match(dimension, multiplier, offset):
                     handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: dimension, multiplier: multiplier ?? 1, constant: offset ?? 0))
                 case let .fill(weight):
+                    assert(weight >= 0)
+
+                    let finalWeight = max(weight, 0)
                     if let weightsInfo {
                         handleSizingConstraint(aa.dimensionAnchor.constraint(equalTo: weightsInfo.dimensionAnchor,
-                                                                             multiplier: weight / weightsInfo.weight))
+                                                                             multiplier: finalWeight / weightsInfo.weight))
                     } else {
-                        weightsInfo = (aa.dimensionAnchor, weight)
+                        if finalWeight > 0 {
+                            weightsInfo = (aa.dimensionAnchor, finalWeight)
+                        } else {
+                            handleSizingConstraint(aa.dimensionAnchor.constraint(equalToConstant: 0))
+                        }
                     }
                 }
             }
             lastAnchors = aas.map { $0.endAnchor }
         }
 
-        lastAnchors.forEach {
-            constraints.append($0.constraint(equalTo: endAnchor, constant: endOffset))
+        for lastAnchor in lastAnchors {
+            constraints.append(lastAnchor.constraint(equalTo: endAnchor, constant: endOffset))
         }
 
         NSLayoutConstraint.activate(constraints)
