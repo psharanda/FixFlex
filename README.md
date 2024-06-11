@@ -213,10 +213,13 @@ Huh, that's a lot of code to write, and imagine needing to modify it — inserti
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FillParentWithInset__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
+parent.fx.hstack(Fix(15),
+                 Flex(child),
+                 Fix(15))
+
 parent.fx.vstack(Fix(15),
                  Flex(child),
                  Fix(15))
@@ -228,8 +231,7 @@ parent.fx.vstack(Fix(15),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PinToParentTrailingBottom__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Flex(),
@@ -247,8 +249,7 @@ parent.fx.vstack(Flex(),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterInParent__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Fill(),
@@ -266,8 +267,7 @@ parent.fx.vstack(Fill(),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CenterLabelInParent__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Fill(),
@@ -285,8 +285,7 @@ parent.fx.vstack(Fill(),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_VerticallyCenterTwoLabels__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Flex([topLabel, bottomLabel]))
@@ -304,8 +303,7 @@ parent.fx.vstack(Fill(),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CellWithIconTitleSubtitleAndChevron__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Fix(15),
@@ -336,8 +334,7 @@ parent.fx.vstack(Fill(),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_CardWithIconTitleAndSubtitle__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.hstack(Fix(5),
@@ -358,8 +355,7 @@ parent.fx.vstack(Fix(5),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsRowWithNotEnoughSpaceForBoth__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Flex([leftLabel, rightLabel]))
@@ -375,8 +371,7 @@ parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_LabelsSplit__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Fix(5),
@@ -398,8 +393,7 @@ parent.fx.hstack(Fix(5),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_FlexMinMax__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Fix(5),
@@ -430,8 +424,7 @@ parent.fx.hstack(Fix(5),
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchors__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
@@ -453,8 +446,7 @@ parent.fx.hstack(startAnchor: label.leadingAnchor,
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_PutBetweenAnchorsAbsolute__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
@@ -477,8 +469,7 @@ parent.fx.hstack(startAnchor: label.leftAnchor,
 
 <img class="snapshot"
      src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_ShadowUsingMatch__default@3x.png"
-     width="200"
-     align="left"/>
+     width="200"/>
 
 ```swift
 parent.fx.vstack(Fill(),

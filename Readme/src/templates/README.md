@@ -213,8 +213,7 @@ Huh, that's a lot of code to write, and imagine needing to modify it — inserti
 
 <img class="snapshot"
      src="<%- story.imageName %>"
-     width="<%- `${story.imageWidth/3}` %>"
-     align="left"/>
+     width="<%- `${story.imageWidth/3}` %>"/>
 
 ```swift
 <%- story.codeSnippet %>

@@ -19,11 +19,11 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
+        // demo
         parent.fx.hstack(Fix(15),
                          Flex(child),
                          Fix(15))
-        // demo
-
+        
         parent.fx.vstack(Fix(15),
                          Flex(child),
                          Fix(15))
