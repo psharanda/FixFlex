@@ -22,6 +22,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.fx.hstack(Fix(15),
                          Flex(child),
                          Fix(15))
+        // demo
 
         parent.fx.vstack(Fix(15),
                          Flex(child),
@@ -42,6 +43,8 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
+        
+        // demo
         parent.fx.hstack(Flex(),
                          Fix(child, 100),
                          Fix(15))
@@ -65,6 +68,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
+        // demo
         parent.fx.hstack(Fill(),
                          Fix(child, 100),
                          Fill())
@@ -91,6 +95,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.hstack(Fill(),
                          Flex(label),
                          Fill())
@@ -124,6 +129,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.hstack(Flex([topLabel, bottomLabel]))
 
         parent.fx.vstack(Fill(),
@@ -165,6 +171,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.hstack(Fix(15),
                          Fix(iconView, 44),
                          Fix(15),
@@ -217,6 +224,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.hstack(Fix(5),
                          Flex([iconView, titleLabel, subtitleLabel]),
                          Fix(5))
@@ -252,6 +260,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Flex([leftLabel, rightLabel]))
 
         parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
@@ -289,6 +298,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Fix(5),
                          Flex([label1, label2, label3]),
                          Fix(5))
@@ -332,6 +342,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Fix(5),
                          Flex(label1),
                          Flex(label2),
@@ -378,6 +389,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
         parent.fx.hstack(Fill(),
@@ -415,6 +427,7 @@ class FixFlexStories: DynamicComponentStories {
 
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
         parent.fx.hstack(Fill(),
@@ -451,6 +464,7 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
+        // demo
         parent.fx.vstack(Fill(),
                          Flex(label),
                          Fill())

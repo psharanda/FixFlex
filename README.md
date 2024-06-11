@@ -6,7 +6,7 @@
 
 ## Features
 
-- Auto Layout code that is easy to write, read, and modify
+- Declarative Auto Layout code that is easy to write, read, and modify
 - Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
 - Lightweight, implementation is only 300 lines of code
 - Compatible with any other Auto Layout code
@@ -174,6 +174,37 @@ public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFlo
 public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
 ```
 
+## How it works
+
+FixFlex is not a black box and doesn't use any magic. It is simply a declarative and convenient way to create constraints and layout guides. Let's take a look at how FixFlex is translated into standard Auto Layout calls:
+
+```swift
+parent.fx.hstack(Fix(10), Flex(label), Fix(10))
+```
+
+Under the hood, FixFlex creates the following constraints and layout guides for this one-liner:
+
+```swift
+label.translatesAutoresizingMaskIntoConstraints = false
+
+let layoutGuideLeft = UILayoutGuide()
+let layoutGuideRight = UILayoutGuide()
+
+parent.addLayoutGuide(layoutGuideLeft)
+parent.addLayoutGuide(layoutGuideRight)
+
+NSLayoutConstraint.activate([
+     layoutGuideLeft.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+     layoutGuideLeft.widthAnchor.constraint(equalToConstant: 10),
+     layoutGuideLeft.trailingAnchor.constraint(equalTo: child.leadingAnchor),
+     label.trailingAnchor.constraint(equalTo: layoutGuideRight.leadingAnchor),
+     layoutGuideRight.widthAnchor.constraint(equalToConstant: 10),
+     layoutGuideRight.trailingAnchor.constraint(equalTo: parent.trailingAnchor)
+])
+```
+
+Huh, that's a lot of code to write, and imagine needing to modify it — inserting an extra view or changing the order. Once you try FixFlex, you won't want to go back!
+
 ## Examples
 
 
@@ -186,21 +217,6 @@ public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CG
      align="left"/>
 
 ```swift
-let child = UIView()
-child.backgroundColor = .systemYellow
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(child)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
-
-parent.fx.hstack(Fix(15),
-                 Flex(child),
-                 Fix(15))
-
 parent.fx.vstack(Fix(15),
                  Flex(child),
                  Fix(15))
@@ -216,17 +232,6 @@ parent.fx.vstack(Fix(15),
      align="left"/>
 
 ```swift
-let child = UIView()
-child.backgroundColor = .systemYellow
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(child)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
-
 parent.fx.hstack(Flex(),
                  Fix(child, 100),
                  Fix(15))
@@ -246,17 +251,6 @@ parent.fx.vstack(Flex(),
      align="left"/>
 
 ```swift
-let child = UIView()
-child.backgroundColor = .systemYellow
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(child)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
-
 parent.fx.hstack(Fill(),
                  Fix(child, 100),
                  Fill())
@@ -276,20 +270,6 @@ parent.fx.vstack(Fill(),
      align="left"/>
 
 ```swift
-let label = UILabel()
-label.text = "topLabel"
-label.font = .preferredFont(forTextStyle: .title1)
-label.adjustsFontForContentSizeCategory = true
-label.backgroundColor = .systemYellow
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(label)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.hstack(Fill(),
                  Flex(label),
                  Fill())
@@ -309,27 +289,6 @@ parent.fx.vstack(Fill(),
      align="left"/>
 
 ```swift
-let topLabel = UILabel()
-topLabel.text = "topLabel"
-topLabel.font = .preferredFont(forTextStyle: .title1)
-topLabel.adjustsFontForContentSizeCategory = true
-topLabel.backgroundColor = .systemYellow
-
-let bottomLabel = UILabel()
-bottomLabel.text = "bottomLabel"
-bottomLabel.font = .preferredFont(forTextStyle: .caption1)
-bottomLabel.adjustsFontForContentSizeCategory = true
-bottomLabel.backgroundColor = .systemOrange
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(topLabel)
-parent.addSubview(bottomLabel)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.hstack(Flex([topLabel, bottomLabel]))
 
 parent.fx.vstack(Fill(),
@@ -349,35 +308,6 @@ parent.fx.vstack(Fill(),
      align="left"/>
 
 ```swift
-let iconView = UIView()
-iconView.backgroundColor = .systemBrown
-
-let titleLabel = UILabel()
-titleLabel.text = "Title"
-titleLabel.font = .preferredFont(forTextStyle: .title1)
-titleLabel.adjustsFontForContentSizeCategory = true
-titleLabel.backgroundColor = .systemYellow
-
-let subtitleLabel = UILabel()
-subtitleLabel.text = "Subtitle"
-subtitleLabel.font = .preferredFont(forTextStyle: .body)
-subtitleLabel.adjustsFontForContentSizeCategory = true
-subtitleLabel.backgroundColor = .systemOrange
-
-let chevron = UIView()
-chevron.backgroundColor = .systemBlue
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-
-parent.addSubview(iconView)
-parent.addSubview(titleLabel)
-parent.addSubview(subtitleLabel)
-parent.addSubview(chevron)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.hstack(Fix(15),
                  Fix(iconView, 44),
                  Fix(15),
@@ -410,33 +340,6 @@ parent.fx.vstack(Fill(),
      align="left"/>
 
 ```swift
-let iconView = UIView()
-iconView.backgroundColor = .systemBrown
-
-let titleLabel = UILabel()
-titleLabel.text = "Title"
-titleLabel.font = .preferredFont(forTextStyle: .title1)
-titleLabel.adjustsFontForContentSizeCategory = true
-titleLabel.backgroundColor = .systemYellow
-titleLabel.textAlignment = .center
-
-let subtitleLabel = UILabel()
-subtitleLabel.text = "Subtitle"
-subtitleLabel.font = .preferredFont(forTextStyle: .body)
-subtitleLabel.adjustsFontForContentSizeCategory = true
-subtitleLabel.backgroundColor = .systemOrange
-subtitleLabel.textAlignment = .center
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-
-parent.addSubview(iconView)
-parent.addSubview(titleLabel)
-parent.addSubview(subtitleLabel)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.hstack(Fix(5),
                  Flex([iconView, titleLabel, subtitleLabel]),
                  Fix(5))
@@ -459,26 +362,6 @@ parent.fx.vstack(Fix(5),
      align="left"/>
 
 ```swift
-let leftLabel = UILabel()
-leftLabel.text = "leftLabel"
-leftLabel.font = .preferredFont(forTextStyle: .title1)
-leftLabel.adjustsFontForContentSizeCategory = true
-leftLabel.backgroundColor = .systemYellow
-
-let rightLabel = UILabel()
-rightLabel.text = "rightLabel"
-rightLabel.font = .preferredFont(forTextStyle: .title1)
-rightLabel.adjustsFontForContentSizeCategory = true
-rightLabel.backgroundColor = .systemOrange
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(leftLabel)
-parent.addSubview(rightLabel)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Flex([leftLabel, rightLabel]))
 
 parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
@@ -496,33 +379,6 @@ parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
      align="left"/>
 
 ```swift
-let label1 = UILabel()
-label1.text = "L1"
-label1.font = .preferredFont(forTextStyle: .title3)
-label1.adjustsFontForContentSizeCategory = true
-label1.backgroundColor = .systemYellow
-
-let label2 = UILabel()
-label2.text = "L2"
-label2.font = .preferredFont(forTextStyle: .title3)
-label2.adjustsFontForContentSizeCategory = true
-label2.backgroundColor = .systemOrange
-
-let label3 = UILabel()
-label3.text = "L3"
-label3.font = .preferredFont(forTextStyle: .title3)
-label3.adjustsFontForContentSizeCategory = true
-label3.backgroundColor = .systemBrown
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(label1)
-parent.addSubview(label2)
-parent.addSubview(label3)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Fix(5),
                  Flex([label1, label2, label3]),
                  Fix(5))
@@ -546,33 +402,6 @@ parent.fx.hstack(Fix(5),
      align="left"/>
 
 ```swift
-let label1 = UILabel()
-label1.text = "Elit Aenean"
-label1.font = .preferredFont(forTextStyle: .title1)
-label1.adjustsFontForContentSizeCategory = true
-label1.backgroundColor = .systemYellow
-
-let label2 = UILabel()
-label2.text = "Elit Aenean"
-label2.font = .preferredFont(forTextStyle: .title1)
-label2.adjustsFontForContentSizeCategory = true
-label2.backgroundColor = .systemOrange
-
-let label3 = UILabel()
-label3.text = "Elit Aenean"
-label3.font = .preferredFont(forTextStyle: .title1)
-label3.adjustsFontForContentSizeCategory = true
-label3.backgroundColor = .systemBrown
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(label1)
-parent.addSubview(label2)
-parent.addSubview(label3)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Fix(5),
                  Flex(label1),
                  Flex(label2),
@@ -605,27 +434,6 @@ parent.fx.hstack(Fix(5),
      align="left"/>
 
 ```swift
-let label = UILabel()
-label.text = "Green Red"
-label.font = .preferredFont(forTextStyle: .title1)
-label.adjustsFontForContentSizeCategory = true
-label.backgroundColor = .systemYellow
-
-let leadingView = UIView()
-leadingView.backgroundColor = .systemGreen.withAlphaComponent(0.5)
-
-let trailingView = UIView()
-trailingView.backgroundColor = .systemRed.withAlphaComponent(0.5)
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(label)
-parent.addSubview(leadingView)
-parent.addSubview(trailingView)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
 parent.fx.hstack(Fill(),
@@ -649,27 +457,6 @@ parent.fx.hstack(startAnchor: label.leadingAnchor,
      align="left"/>
 
 ```swift
-let label = UILabel()
-label.text = "Green Red"
-label.font = .preferredFont(forTextStyle: .title1)
-label.adjustsFontForContentSizeCategory = true
-label.backgroundColor = .systemYellow
-
-let leadingView = UIView()
-leadingView.backgroundColor = .systemGreen.withAlphaComponent(0.5)
-
-let trailingView = UIView()
-trailingView.backgroundColor = .systemRed.withAlphaComponent(0.5)
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-parent.addSubview(label)
-parent.addSubview(leadingView)
-parent.addSubview(trailingView)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Flex([label, leadingView, trailingView]))
 
 parent.fx.hstack(Fill(),
@@ -694,25 +481,6 @@ parent.fx.hstack(startAnchor: label.leftAnchor,
      align="left"/>
 
 ```swift
-let label = UILabel()
-label.text = "Lorem Ipsum"
-label.font = .preferredFont(forTextStyle: .title1)
-label.adjustsFontForContentSizeCategory = true
-label.backgroundColor = .systemYellow
-
-let matchView = UIView()
-matchView.backgroundColor = .systemRed.withAlphaComponent(0.5)
-
-let parent = UIView()
-parent.translatesAutoresizingMaskIntoConstraints = false
-parent.backgroundColor = .systemMint
-
-parent.addSubview(matchView)
-parent.addSubview(label)
-
-parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
-parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
-
 parent.fx.vstack(Fill(),
                  Flex(label),
                  Fill())

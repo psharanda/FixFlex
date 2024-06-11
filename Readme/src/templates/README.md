@@ -6,7 +6,7 @@
 
 ## Features
 
-- Auto Layout code that is easy to write, read, and modify
+- Declarative Auto Layout code that is easy to write, read, and modify
 - Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
 - Lightweight, implementation is only 300 lines of code
 - Compatible with any other Auto Layout code
@@ -173,6 +173,37 @@ public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFlo
 
 public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
 ```
+
+## How it works
+
+FixFlex is not a black box and doesn't use any magic. It is simply a declarative and convenient way to create constraints and layout guides. Let's take a look at how FixFlex is translated into standard Auto Layout calls:
+
+```swift
+parent.fx.hstack(Fix(10), Flex(label), Fix(10))
+```
+
+Under the hood, FixFlex creates the following constraints and layout guides for this one-liner:
+
+```swift
+label.translatesAutoresizingMaskIntoConstraints = false
+
+let layoutGuideLeft = UILayoutGuide()
+let layoutGuideRight = UILayoutGuide()
+
+parent.addLayoutGuide(layoutGuideLeft)
+parent.addLayoutGuide(layoutGuideRight)
+
+NSLayoutConstraint.activate([
+     layoutGuideLeft.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+     layoutGuideLeft.widthAnchor.constraint(equalToConstant: 10),
+     layoutGuideLeft.trailingAnchor.constraint(equalTo: child.leadingAnchor),
+     label.trailingAnchor.constraint(equalTo: layoutGuideRight.leadingAnchor),
+     layoutGuideRight.widthAnchor.constraint(equalToConstant: 10),
+     layoutGuideRight.trailingAnchor.constraint(equalTo: parent.trailingAnchor)
+])
+```
+
+Huh, that's a lot of code to write, and imagine needing to modify it — inserting an extra view or changing the order. Once you try FixFlex, you won't want to go back!
 
 ## Examples
 

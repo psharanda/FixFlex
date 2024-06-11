@@ -53,6 +53,8 @@ function storiesFromFile(
   const codeSnippetRegex =
     /func\s+story_(?<name>[A-Za-z0-9_]+)\(\)\s*->\s*UIView\s*{(?<codeSnippet>[\s\S]*?)return/g;
 
+  const demoSnippetRegex = /\/\/\sdemo(?<demo>[\s\S]*)/g;
+
   const result: Story[] = [];
   let match;
   while ((match = codeSnippetRegex.exec(sourceCode)) !== null && match.groups) {
@@ -61,10 +63,14 @@ function storiesFromFile(
     let size = imageSize.imageSize(repoRoot + imageName);
     let imageWidth = size.width ?? 0;
     let imageHeight = size.height ?? 0;
+    let codeSnippet = match.groups["codeSnippet"];
+
+    let demoSnippet = codeSnippet.split("// demo")[1];
+
     result.push({
       name: storyName,
       nameAsWords: pascalCaseToWords(match.groups["name"]),
-      codeSnippet: formatMultilineString(match.groups["codeSnippet"]),
+      codeSnippet: formatMultilineString(demoSnippet),
       imageName: imageName,
       imageWidth: imageWidth,
       imageHeight: imageHeight,
