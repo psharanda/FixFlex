@@ -8,9 +8,11 @@
 
 - Declarative Auto Layout code that is easy to write, read, and modify
 - Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
-- Lightweight, implementation is only 300 lines of code
+- Implementation is only 300 lines of code
 - Compatible with any other Auto Layout code
 - Basically generates a bunch of activated `NSLayoutConstraint` and `UILayoutGuide`
+- Keeps your view hierarchy flat, no need for exta containers
+- Lightweight alternative to `UIStackView`
 - Super straightforward mental model
 - Typesafe alternative to VFL
 - Dynamic Type and Right-To-Left friendly
@@ -176,30 +178,51 @@ public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CG
 
 ## How it works
 
-FixFlex is not a black box and doesn't use any magic. It is simply a declarative and convenient way to create constraints and layout guides. Let's take a look at how FixFlex is translated into standard Auto Layout calls:
+FixFlex is not a black box and doesn't use any magic. It is simply a declarative and convenient way to create constraints and layout guides. Let's take a look at how FixFlex is translated into standard Auto Layout calls when we want to center vertically two labels:
+
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_VerticallyCenterTwoLabels__default@3x.png"
+     width="200"/>
 
 ```swift
-parent.fx.hstack(Fix(10), Flex(label), Fix(10))
+parent.fx.hstack(Flex([topLabel, bottomLabel]))
+
+parent.fx.vstack(Fill(),
+                 Flex(topLabel),
+                 Fix(5),
+                 Flex(bottomLabel),
+                 Fill())
 ```
 
-Under the hood, FixFlex creates the following constraints and layout guides for this one-liner:
+Under the hood, FixFlex creates constraints and layout guides which equivalent to the following:
 
 ```swift
-label.translatesAutoresizingMaskIntoConstraints = false
+topLabel.translatesAutoresizingMaskIntoConstraints = false
+bottomLabel.translatesAutoresizingMaskIntoConstraints = false
 
-let layoutGuideLeft = UILayoutGuide()
-let layoutGuideRight = UILayoutGuide()
+let layoutGuideTop = UILayoutGuide()
+let layoutGuideMiddle = UILayoutGuide()
+let layoutGuideBottom = UILayoutGuide()
 
-parent.addLayoutGuide(layoutGuideLeft)
-parent.addLayoutGuide(layoutGuideRight)
+parent.addLayoutGuide(layoutGuideTop)
+parent.addLayoutGuide(layoutGuideMiddle)
+parent.addLayoutGuide(layoutGuideBottom)
 
 NSLayoutConstraint.activate([
-     layoutGuideLeft.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
-     layoutGuideLeft.widthAnchor.constraint(equalToConstant: 10),
-     layoutGuideLeft.trailingAnchor.constraint(equalTo: child.leadingAnchor),
-     label.trailingAnchor.constraint(equalTo: layoutGuideRight.leadingAnchor),
-     layoutGuideRight.widthAnchor.constraint(equalToConstant: 10),
-     layoutGuideRight.trailingAnchor.constraint(equalTo: parent.trailingAnchor)
+    // hstack
+    topLabel.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+    topLabel.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+    bottomLabel.leadingAnchor.constraint(equalTo: parent.leadingAnchor),
+    bottomLabel.trailingAnchor.constraint(equalTo: parent.trailingAnchor),
+    //vstack
+    layoutGuideTop.topAnchor.constraint(equalTo: parent.topAnchor),
+    layoutGuideTop.bottomAnchor.constraint(equalTo: topLabel.topAnchor),
+    topLabel.bottomAnchor.constraint(equalTo: layoutGuideMiddle.topAnchor),
+    layoutGuideMiddle.heightAnchor.constraint(equalToConstant: 5),
+    layoutGuideMiddle.bottomAnchor.constraint(equalTo: bottomLabel.topAnchor),
+    bottomLabel.bottomAnchor.constraint(equalTo: layoutGuideBottom.topAnchor),
+    layoutGuideBottom.bottomAnchor.constraint(equalTo: parent.bottomAnchor),
+    layoutGuideTop.heightAnchor.constraint(equalTo: layoutGuideBottom.heightAnchor),
 ])
 ```
 
