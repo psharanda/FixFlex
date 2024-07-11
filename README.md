@@ -518,6 +518,8 @@ parent.fx.hstack(startAnchor: label.leadingAnchor,
 
 ## Integration
 
+### [Swift Package Manager](https://github.com/apple/swift-package-manager)
+
 Use Swift Package Manager and add dependency to `Package.swift` file.
 
 ```swift
@@ -530,6 +532,18 @@ Alternatively, in Xcode select `File > Add Package Dependencies…` and add FixF
 
 ```
 https://github.com/psharanda/FixFlex.git
+```
+
+### Carthage
+
+Add `github "psharanda/FixFlex"` to your `Cartfile`
+
+### CocoaPods
+`FixFlex` is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "FixFlex"
 ```
 
 ## Contributing
