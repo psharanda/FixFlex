@@ -150,13 +150,12 @@ public struct SizingIntent {
     }
 }
 
-#if DEBUG
+// MARK: - Fix
+
 /// Creates a fixed-size spacer layout guide.
-/// - Parameters:
-///   - value: Constant size in points for the spacer.
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
+/// - Parameter value: Constant size in points for the spacer.
 /// - Returns: A sizing intent describing the fixed spacer.
+#if DEBUG
 public func Fix(
     _ value: CGFloat,
     fileID: String = #fileID,
@@ -169,14 +168,18 @@ public func Fix(
         line: line
     )
 }
+#else
+public func Fix(_ value: CGFloat) -> SizingIntent {
+    return SizingIntent(views: nil, sizing: .fix(value: value))
+}
+#endif
 
 /// Constrains the provided view to a fixed size in the stacking axis.
 /// - Parameters:
 ///   - view: View to constrain.
 ///   - value: Constant size in points for the stacking axis.
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
 /// - Returns: A sizing intent describing the fixed view size.
+#if DEBUG
 public func Fix(
     _ view: _View,
     _ value: CGFloat,
@@ -185,14 +188,18 @@ public func Fix(
 ) -> SizingIntent {
     return Fix([view], value, fileID: fileID, line: line)
 }
+#else
+public func Fix(_ view: _View, _ value: CGFloat) -> SizingIntent {
+    return Fix([view], value)
+}
+#endif
 
 /// Constrains all provided views to a fixed size in the stacking axis.
 /// - Parameters:
 ///   - views: Views to constrain.
 ///   - value: Constant size in points for the stacking axis.
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
 /// - Returns: A sizing intent describing the fixed view sizes.
+#if DEBUG
 public func Fix(
     _ views: [_View],
     _ value: CGFloat,
@@ -206,14 +213,20 @@ public func Fix(
         line: line
     )
 }
+#else
+public func Fix(_ views: [_View], _ value: CGFloat) -> SizingIntent {
+    return SizingIntent(views: views, sizing: .fix(value: value))
+}
+#endif
+
+// MARK: - Flex
 
 /// Creates a flexible spacer guide with optional min/max constraints.
 /// - Parameters:
 ///   - min: Optional lower bound on the spacer size (default `nil` for no bound).
 ///   - max: Optional upper bound on the spacer size (default `nil` for no bound).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
 /// - Returns: A sizing intent describing a flexible spacer.
+#if DEBUG
 public func Flex(
     min: CGFloat? = nil,
     max: CGFloat? = nil,
@@ -232,6 +245,22 @@ public func Flex(
         line: line
     )
 }
+#else
+public func Flex(
+    min: CGFloat? = nil,
+    max: CGFloat? = nil
+) -> SizingIntent {
+    return SizingIntent(
+        views: nil,
+        sizing: .flex(
+            min: min,
+            max: max,
+            huggingPriority: .required,
+            compressionResistancePriority: .required
+        )
+    )
+}
+#endif
 
 /// Makes the view flexible within the stack, optionally constraining and adjusting priorities.
 /// - Parameters:
@@ -240,9 +269,8 @@ public func Flex(
 ///   - max: Optional upper bound on the view size (default `nil`).
 ///   - huggingPriority: Optional hugging priority to apply on the stacking axis (default `nil` leaves existing).
 ///   - compressionResistancePriority: Optional compression resistance to apply on the stacking axis (default `nil` leaves existing).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
 /// - Returns: A sizing intent describing a flexible view.
+#if DEBUG
 public func Flex(
     _ view: _View,
     min: CGFloat? = nil,
@@ -261,6 +289,23 @@ public func Flex(
         line: line
     )
 }
+#else
+public func Flex(
+    _ view: _View,
+    min: CGFloat? = nil,
+    max: CGFloat? = nil,
+    huggingPriority: _LayoutPriority? = nil,
+    compressionResistancePriority: _LayoutPriority? = nil
+) -> SizingIntent {
+    return Flex(
+        [view],
+        min: min,
+        max: max,
+        huggingPriority: huggingPriority,
+        compressionResistancePriority: compressionResistancePriority
+    )
+}
+#endif
 
 /// Makes the views flexible in parallel, optionally constraining and adjusting priorities.
 /// - Parameters:
@@ -269,9 +314,8 @@ public func Flex(
 ///   - max: Optional upper bound on each view size (default `nil`).
 ///   - huggingPriority: Optional hugging priority to apply on the stacking axis (default `nil` leaves existing).
 ///   - compressionResistancePriority: Optional compression resistance to apply on the stacking axis (default `nil` leaves existing).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
 /// - Returns: A sizing intent describing flexible parallel views.
+#if DEBUG
 public func Flex(
     _ views: [_View],
     min: CGFloat? = nil,
@@ -293,232 +337,7 @@ public func Flex(
         line: line
     )
 }
-
-/// Matches a spacer guide dimension to another layout dimension.
-/// - Parameters:
-///   - dimension: Dimension to match (width/height anchor).
-///   - multiplier: Multiplier for proportional sizing (default 1).
-///   - offset: Constant added after multiplication (default 0).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing the matched spacer.
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
-public func Match(
-    dimension: NSLayoutDimension,
-    multiplier: CGFloat = 1,
-    offset: CGFloat = 0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return SizingIntent(
-        views: nil,
-        sizing: .match(
-            dimension: dimension,
-            multiplier: multiplier,
-            offset: offset
-        ),
-        fileID: fileID,
-        line: line
-    )
-}
-
-/// Matches the view dimension to another layout dimension.
-/// - Parameters:
-///   - view: View whose dimension is matched.
-///   - dimension: Dimension to match (width/height anchor).
-///   - multiplier: Multiplier for proportional sizing (default 1).
-///   - offset: Constant added after multiplication (default 0).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing the matched view.
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
-public func Match(
-    _ view: _View,
-    dimension: NSLayoutDimension,
-    multiplier: CGFloat = 1,
-    offset: CGFloat = 0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return Match(
-        [view],
-        dimension: dimension,
-        multiplier: multiplier,
-        offset: offset,
-        fileID: fileID,
-        line: line
-    )
-}
-
-/// Matches all provided views to another layout dimension.
-/// - Parameters:
-///   - views: Views whose dimensions are matched in parallel.
-///   - dimension: Dimension to match (width/height anchor).
-///   - multiplier: Multiplier for proportional sizing (default 1).
-///   - offset: Constant added after multiplication (default 0).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing matched parallel views.
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
-public func Match(
-    _ views: [_View],
-    dimension: NSLayoutDimension,
-    multiplier: CGFloat = 1,
-    offset: CGFloat = 0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return SizingIntent(
-        views: views,
-        sizing: .match(
-            dimension: dimension,
-            multiplier: multiplier,
-            offset: offset
-        ),
-        fileID: fileID,
-        line: line
-    )
-}
-
-/// Creates a weighted spacer that shares remaining space with other fills.
-/// - Parameters:
-///   - weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses the spacer).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing the weighted spacer.
-public func Fill(
-    weight: CGFloat = 1.0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return SizingIntent(
-        views: nil,
-        sizing: .fill(weight: weight),
-        fileID: fileID,
-        line: line
-    )
-}
-
-/// Makes the view occupy remaining space proportionally to the provided weight.
-/// - Parameters:
-///   - view: View to fill remaining space.
-///   - weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses the view dimension).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing the weighted view.
-public func Fill(
-    _ view: _View,
-    weight: CGFloat = 1.0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return Fill(
-        [view],
-        weight: weight,
-        fileID: fileID,
-        line: line
-    )
-}
-
-/// Makes the views occupy remaining space in parallel with a shared weight.
-/// - Parameters:
-///   - views: Views to fill remaining space in parallel.
-///   - weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses each view dimension).
-///   - fileID: Auto-captured call-site for debug constraint identifiers.
-///   - line: Auto-captured call-site line for debug constraint identifiers.
-/// - Returns: A sizing intent describing weighted parallel views.
-public func Fill(
-    _ views: [_View],
-    weight: CGFloat = 1.0,
-    fileID: String = #fileID,
-    line: Int = #line
-) -> SizingIntent {
-    return SizingIntent(
-        views: views,
-        sizing: .fill(weight: weight),
-        fileID: fileID,
-        line: line
-    )
-}
 #else
-
-/// Creates a fixed-size spacer layout guide.
-/// - Parameter value: Constant size in points for the spacer.
-/// - Returns: A sizing intent describing the fixed spacer.
-public func Fix(_ value: CGFloat) -> SizingIntent {
-    return SizingIntent(views: nil, sizing: .fix(value: value))
-}
-
-/// Constrains the provided view to a fixed size in the stacking axis.
-/// - Parameters:
-///   - view: View to constrain.
-///   - value: Constant size in points for the stacking axis.
-/// - Returns: A sizing intent describing the fixed view size.
-public func Fix(_ view: _View, _ value: CGFloat) -> SizingIntent {
-    return Fix([view], value)
-}
-
-/// Constrains all provided views to a fixed size in the stacking axis.
-/// - Parameters:
-///   - views: Views to constrain.
-///   - value: Constant size in points for the stacking axis.
-/// - Returns: A sizing intent describing the fixed view sizes.
-public func Fix(_ views: [_View], _ value: CGFloat) -> SizingIntent {
-    return SizingIntent(views: views, sizing: .fix(value: value))
-}
-
-/// Creates a flexible spacer guide with optional min/max constraints.
-/// - Parameters:
-///   - min: Optional lower bound on the spacer size (default `nil` for no bound).
-///   - max: Optional upper bound on the spacer size (default `nil` for no bound).
-/// - Returns: A sizing intent describing a flexible spacer.
-public func Flex(
-    min: CGFloat? = nil,
-    max: CGFloat? = nil
-) -> SizingIntent {
-    return SizingIntent(
-        views: nil,
-        sizing: .flex(
-            min: min,
-            max: max,
-            huggingPriority: .required,
-            compressionResistancePriority: .required
-        )
-    )
-}
-
-/// Makes the view flexible within the stack, optionally constraining and adjusting priorities.
-/// - Parameters:
-///   - view: View to size flexibly.
-///   - min: Optional lower bound on the view size (default `nil`).
-///   - max: Optional upper bound on the view size (default `nil`).
-///   - huggingPriority: Optional hugging priority to apply on the stacking axis (default `nil` leaves existing).
-///   - compressionResistancePriority: Optional compression resistance to apply on the stacking axis (default `nil` leaves existing).
-/// - Returns: A sizing intent describing a flexible view.
-public func Flex(
-    _ view: _View,
-    min: CGFloat? = nil,
-    max: CGFloat? = nil,
-    huggingPriority: _LayoutPriority? = nil,
-    compressionResistancePriority: _LayoutPriority? = nil
-) -> SizingIntent {
-    return Flex(
-        [view],
-        min: min,
-        max: max,
-        huggingPriority: huggingPriority,
-        compressionResistancePriority: compressionResistancePriority
-    )
-}
-
-/// Makes the views flexible in parallel, optionally constraining and adjusting priorities.
-/// - Parameters:
-///   - views: Views to size flexibly in parallel.
-///   - min: Optional lower bound on each view size (default `nil`).
-///   - max: Optional upper bound on each view size (default `nil`).
-///   - huggingPriority: Optional hugging priority to apply on the stacking axis (default `nil` leaves existing).
-///   - compressionResistancePriority: Optional compression resistance to apply on the stacking axis (default `nil` leaves existing).
-/// - Returns: A sizing intent describing flexible parallel views.
 public func Flex(
     _ views: [_View],
     min: CGFloat? = nil,
@@ -536,14 +355,37 @@ public func Flex(
         )
     )
 }
+#endif
+
+// MARK: - Match
 
 /// Matches a spacer guide dimension to another layout dimension.
 /// - Parameters:
 ///   - dimension: Dimension to match (width/height anchor).
 ///   - multiplier: Multiplier for proportional sizing (default 1).
 ///   - offset: Constant added after multiplication (default 0).
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
 /// - Returns: A sizing intent describing the matched spacer.
+/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
+#if DEBUG
+public func Match(
+    dimension: NSLayoutDimension,
+    multiplier: CGFloat = 1,
+    offset: CGFloat = 0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return SizingIntent(
+        views: nil,
+        sizing: .match(
+            dimension: dimension,
+            multiplier: multiplier,
+            offset: offset
+        ),
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Match(
     dimension: NSLayoutDimension,
     multiplier: CGFloat = 1,
@@ -558,6 +400,7 @@ public func Match(
         )
     )
 }
+#endif
 
 /// Matches the view dimension to another layout dimension.
 /// - Parameters:
@@ -565,8 +408,27 @@ public func Match(
 ///   - dimension: Dimension to match (width/height anchor).
 ///   - multiplier: Multiplier for proportional sizing (default 1).
 ///   - offset: Constant added after multiplication (default 0).
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
 /// - Returns: A sizing intent describing the matched view.
+/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
+#if DEBUG
+public func Match(
+    _ view: _View,
+    dimension: NSLayoutDimension,
+    multiplier: CGFloat = 1,
+    offset: CGFloat = 0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return Match(
+        [view],
+        dimension: dimension,
+        multiplier: multiplier,
+        offset: offset,
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Match(
     _ view: _View,
     dimension: NSLayoutDimension,
@@ -580,6 +442,7 @@ public func Match(
         offset: offset
     )
 }
+#endif
 
 /// Matches all provided views to another layout dimension.
 /// - Parameters:
@@ -587,8 +450,29 @@ public func Match(
 ///   - dimension: Dimension to match (width/height anchor).
 ///   - multiplier: Multiplier for proportional sizing (default 1).
 ///   - offset: Constant added after multiplication (default 0).
-/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
 /// - Returns: A sizing intent describing matched parallel views.
+/// - Note: Effective size is resolved as `otherDimension * multiplier + offset`.
+#if DEBUG
+public func Match(
+    _ views: [_View],
+    dimension: NSLayoutDimension,
+    multiplier: CGFloat = 1,
+    offset: CGFloat = 0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return SizingIntent(
+        views: views,
+        sizing: .match(
+            dimension: dimension,
+            multiplier: multiplier,
+            offset: offset
+        ),
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Match(
     _ views: [_View],
     dimension: NSLayoutDimension,
@@ -604,28 +488,77 @@ public func Match(
         )
     )
 }
+#endif
+
+// MARK: - Fill
 
 /// Creates a weighted spacer that shares remaining space with other fills.
 /// - Parameter weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses the spacer).
 /// - Returns: A sizing intent describing the weighted spacer.
+#if DEBUG
+public func Fill(
+    weight: CGFloat = 1.0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return SizingIntent(
+        views: nil,
+        sizing: .fill(weight: weight),
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Fill(weight: CGFloat = 1.0) -> SizingIntent {
     return SizingIntent(views: nil, sizing: .fill(weight: weight))
 }
+#endif
 
 /// Makes the view occupy remaining space proportionally to the provided weight.
 /// - Parameters:
 ///   - view: View to fill remaining space.
 ///   - weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses the view dimension).
 /// - Returns: A sizing intent describing the weighted view.
+#if DEBUG
+public func Fill(
+    _ view: _View,
+    weight: CGFloat = 1.0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return Fill(
+        [view],
+        weight: weight,
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Fill(_ view: _View, weight: CGFloat = 1.0) -> SizingIntent {
     return Fill([view], weight: weight)
 }
+#endif
 
 /// Makes the views occupy remaining space in parallel with a shared weight.
 /// - Parameters:
 ///   - views: Views to fill remaining space in parallel.
 ///   - weight: Proportional weight for distributing remaining space (default 1.0; 0 collapses each view dimension).
 /// - Returns: A sizing intent describing weighted parallel views.
+#if DEBUG
+public func Fill(
+    _ views: [_View],
+    weight: CGFloat = 1.0,
+    fileID: String = #fileID,
+    line: Int = #line
+) -> SizingIntent {
+    return SizingIntent(
+        views: views,
+        sizing: .fill(weight: weight),
+        fileID: fileID,
+        line: line
+    )
+}
+#else
 public func Fill(_ views: [_View], weight: CGFloat = 1.0) -> SizingIntent {
     return SizingIntent(views: views, sizing: .fill(weight: weight))
 }
