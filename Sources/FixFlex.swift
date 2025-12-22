@@ -688,14 +688,14 @@ public extension FixFlexing {
         var layoutGuides: [_LayoutGuide] = []
 
         for (intentIndex, intent) in intents.enumerated() {
-            let aas: [AxisAnchors<AnchorType>]
+            let axisAnchorsList: [AxisAnchors<AnchorType>]
 
             if let views = intent.views, views.count > 0 {
                 for view in views {
                     view.translatesAutoresizingMaskIntoConstraints = false
                 }
 
-                aas = views.map { view in
+                axisAnchorsList = views.map { view in
                     builder.anchorsForView(view)
                 }
             } else {
@@ -703,13 +703,13 @@ public extension FixFlexing {
                 layoutGuides.append(layoutGuide)
                 base.addLayoutGuide(layoutGuide)
                 intent.onCreateLayoutGuide?(layoutGuide)
-                aas = [builder.anchorsForLayoutGuide(layoutGuide)]
+                axisAnchorsList = [builder.anchorsForLayoutGuide(layoutGuide)]
             }
 
-            for (aaIndex, aa) in aas.enumerated() {
+            for (index, axisAnchors) in axisAnchorsList.enumerated() {
                 for lastAnchor in lastAnchors {
                     let startConstant = (lastAnchor === startAnchor ? startOffset ?? 0 : 0) + intent.spacingBefore
-                    let constraint = aa.startAnchor.constraint(
+                    let constraint = axisAnchors.startAnchor.constraint(
                         equalTo: lastAnchor,
                         constant: startConstant
                     )
@@ -718,7 +718,7 @@ public extension FixFlexing {
                         sizing: intent.sizing,
                         section: "start",
                         intentIndex: intentIndex,
-                        targetIndex: aaIndex,
+                        targetIndex: index,
                         fileID: intent.fileID,
                         line: intent.line
                     )
@@ -734,7 +734,7 @@ public extension FixFlexing {
                         sizing: intent.sizing,
                         section: "dimension",
                         intentIndex: intentIndex,
-                        targetIndex: aaIndex,
+                        targetIndex: index,
                         fileID: intent.fileID,
                         line: intent.line
                     )
@@ -746,7 +746,7 @@ public extension FixFlexing {
                 switch intent.sizing {
                 case let .fix(value):
                     handleSizingConstraint(
-                        aa.dimensionAnchor.constraint(equalToConstant: value)
+                        axisAnchors.dimensionAnchor.constraint(equalToConstant: value)
                     )
                 case let .flex(min, max, huggingPriority, compressionResistancePriority):
 
@@ -769,17 +769,17 @@ public extension FixFlexing {
                     }
                     if let min {
                         handleSizingConstraint(
-                            aa.dimensionAnchor.constraint(greaterThanOrEqualToConstant: min)
+                            axisAnchors.dimensionAnchor.constraint(greaterThanOrEqualToConstant: min)
                         )
                     }
                     if let max {
                         handleSizingConstraint(
-                            aa.dimensionAnchor.constraint(lessThanOrEqualToConstant: max)
+                            axisAnchors.dimensionAnchor.constraint(lessThanOrEqualToConstant: max)
                         )
                     }
                 case let .match(dimension, multiplier, offset):
                     handleSizingConstraint(
-                        aa.dimensionAnchor.constraint(
+                        axisAnchors.dimensionAnchor.constraint(
                             equalTo: dimension,
                             multiplier: multiplier,
                             constant: offset
@@ -791,23 +791,24 @@ public extension FixFlexing {
                     let finalWeight = max(weight, 0)
                     if let weightsInfo {
                         handleSizingConstraint(
-                            aa.dimensionAnchor.constraint(
+                            axisAnchors.dimensionAnchor.constraint(
                                 equalTo: weightsInfo.dimensionAnchor,
                                 multiplier: finalWeight / weightsInfo.weight
                             )
                         )
                     } else {
                         if finalWeight > 0 {
-                            weightsInfo = (aa.dimensionAnchor, finalWeight)
+                            weightsInfo = (axisAnchors.dimensionAnchor, finalWeight)
                         } else {
                             handleSizingConstraint(
-                                aa.dimensionAnchor.constraint(equalToConstant: 0)
+                                axisAnchors.dimensionAnchor.constraint(equalToConstant: 0)
                             )
                         }
                     }
                 }
             }
-            lastAnchors = aas.map { $0.endAnchor }
+            // Track end anchors from all parallel views so the next intent chains from each of them
+            lastAnchors = axisAnchorsList.map { $0.endAnchor }
         }
 
         if let endOffset {
