@@ -564,6 +564,49 @@ class FixFlexStories: DynamicComponentStories {
         return parent
     }
 
+    @objc static func story_OverlapWithSpacingBefore() -> UIView {
+        let first = UIView()
+        first.backgroundColor = .systemBlue
+
+        let second = UIView()
+        second.backgroundColor = .systemPink
+
+        let third = UIView()
+        third.backgroundColor = .systemYellow
+
+        for item in [first, second, third] {
+            item.clipsToBounds = true
+            item.layer.cornerRadius = 30
+        }
+
+        let parent = UIView()
+        parent.translatesAutoresizingMaskIntoConstraints = false
+        parent.backgroundColor = .systemMint
+        parent.widthAnchor.constraint(equalToConstant: 240).isActive = true
+        parent.heightAnchor.constraint(equalToConstant: 120).isActive = true
+
+        parent.addSubview(first)
+        parent.addSubview(second)
+        parent.addSubview(third)
+
+        // demo
+        parent.fx.hstack(
+            Fill(),
+            Fix(first, 60),
+            Fix(second, 60).spacingBefore(-20),
+            Fix(third, 60).spacingBefore(-20),
+            Fill()
+        )
+
+        parent.fx.vstack(
+            Fill(),
+            Fix([first, second, third], 60),
+            Fill()
+        )
+
+        return parent
+    }
+
     @objc static func story_ShadowUsingMatch() -> UIView {
         let label = UILabel()
         label.text = "Lorem Ipsum"

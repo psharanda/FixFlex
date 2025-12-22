@@ -77,6 +77,14 @@ public struct SizingIntent {
     }
     #endif
 
+    var spacingBefore: CGFloat = 0
+
+    public func spacingBefore(_ value: CGFloat) -> SizingIntent {
+        var newSelf = self
+        newSelf.spacingBefore = value
+        return newSelf
+    }
+
     var onCreateDimensionConstraint: ((NSLayoutConstraint) -> Void)?
 
     public func onCreateDimensionConstraint(
@@ -590,9 +598,10 @@ public extension FixFlexing {
 
             for (aaIndex, aa) in aas.enumerated() {
                 for lastAnchor in lastAnchors {
+                    let startConstant = (lastAnchor === startAnchor ? startOffset ?? 0 : 0) + intent.spacingBefore
                     let constraint = aa.startAnchor.constraint(
                         equalTo: lastAnchor,
-                        constant: lastAnchor === startAnchor ? startOffset ?? 0 : 0
+                        constant: startConstant
                     )
                     #if DEBUG
                     constraint.identifier = constraintIdentifier(

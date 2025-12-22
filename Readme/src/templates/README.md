@@ -125,13 +125,6 @@ func vstack(
 - `constraints`: all constraints activated for the stack
 - `layoutGuides`: guides created for spacers/fills
 
-You can customize generated pieces via callbacks on `SizingIntent`:
-
-- `onCreateStartConstraint(_:)` lets you tweak each constraint that pins an item to the previous anchor (or stack start)
-- `onCreateEndConstraint(_:)` lets you tweak the constraint that pins the final item to the end anchor
-- `onCreateDimensionConstraint(_:)` lets you tweak each size constraint (e.g., priority or identifier)
-- `onCreateLayoutGuide(_:)` gives you the implicit `UILayoutGuide` for configuration
-
 A `SizingIntent` is essentially an instruction for calculating the width or height of:
 
 - a spacer (for which a `UILayoutGuide` is created behind the scenes)
@@ -187,6 +180,17 @@ public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFlo
 
 public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
 ```
+
+### SizingIntent Modifiers
+
+You can customize generated pieces via callbacks on `SizingIntent`:
+
+- `onCreateStartConstraint(_:)` lets you tweak each constraint that pins an item to the previous anchor (or stack start)
+- `onCreateEndConstraint(_:)` lets you tweak the constraint that pins the final item to the end anchor
+- `onCreateDimensionConstraint(_:)` lets you tweak each size constraint (e.g., priority or identifier)
+- `onCreateLayoutGuide(_:)` gives you the implicit `UILayoutGuide` for configuration
+
+Each `SizingIntent` can also specify a `spacingBefore(_:)` to add (or subtract, via negative values) the gap before that item—handy for overlaps or custom per-item spacing.
 
 ## How it works
 
