@@ -38,10 +38,17 @@ public struct SizingIntent {
     let sizing: Sizing
 
     var onCreateDimensionConstraint: ((NSLayoutConstraint) -> Void)?
+    var onCreateLayoutGuide: ((_LayoutGuide) -> Void)?
 
     public func onCreateDimensionConstraint(_ block: @escaping (NSLayoutConstraint) -> Void) -> SizingIntent {
         var newSelf = self
         newSelf.onCreateDimensionConstraint = block
+        return newSelf
+    }
+
+    public func onCreateLayoutGuide(_ block: @escaping (_LayoutGuide) -> Void) -> SizingIntent {
+        var newSelf = self
+        newSelf.onCreateLayoutGuide = block
         return newSelf
     }
 }
@@ -213,6 +220,7 @@ public extension FixFlexing {
                 let layoutGuide = _LayoutGuide()
                 layoutGuides.append(layoutGuide)
                 base.addLayoutGuide(layoutGuide)
+                intent.onCreateLayoutGuide?(layoutGuide)
                 aas = [builder.anchorsForLayoutGuide(layoutGuide)]
             }
 

@@ -127,6 +127,11 @@ func vstack(
 - `startConstraints`: constraints that pin the first item(s) to `startAnchor` using `startOffset`
 - `endConstraints`: constraints that pin the last item(s) to `endAnchor` using `endOffset`
 
+You can customize generated pieces via callbacks on `SizingIntent`:
+
+- `onCreateDimensionConstraint(_:)` lets you tweak each size constraint (e.g., priority or identifier)
+- `onCreateLayoutGuide(_:)` gives you the implicit `UILayoutGuide` for configuration
+
 A `SizingIntent` is essentially an instruction for calculating the width or height of:
 
 - a spacer (for which a `UILayoutGuide` is created behind the scenes)
