@@ -126,12 +126,6 @@ func vstack(
 - `constraints`: all constraints activated for the stack
 - `layoutGuides`: guides created for spacers/fills
 
-### Behavior notes
-
-- `hstack` defaults to leading/trailing so layouts mirror in RTL; set `useAbsolutePositioning: true` to force left/right.
-- `startOffset`/`endOffset = nil` leaves the leading/trailing item unpinned and should only be used when other constraints define its position.
-- `Flex` on views keeps existing hugging/compression unless you pass overrides; the spacer-only overload applies `.required` by default.
-
 A `SizingIntent` is essentially an instruction for calculating the width or height of:
 
 - a spacer (for which a `UILayoutGuide` is created behind the scenes)
@@ -198,6 +192,12 @@ You can customize generated pieces via callbacks on `SizingIntent`:
 - `onCreateLayoutGuide(_:)` gives you the implicit `UILayoutGuide` for configuration
 
 Each `SizingIntent` can also specify a `spacingBefore(_:)` to add (or subtract, via negative values) the gap before that item—handy for overlaps or custom per-item spacing.
+
+### Behavior notes
+
+- `hstack` defaults to leading/trailing so layouts mirror in RTL; set `useAbsolutePositioning: true` to force left/right.
+- `startOffset`/`endOffset = nil` leaves the leading/trailing item unpinned and should only be used when other constraints define its position.
+- `Flex` on views keeps existing hugging/compression unless you pass overrides; the spacer-only overload applies `.required` by default.
 
 ## How it works
 
