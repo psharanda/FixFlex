@@ -95,16 +95,16 @@ That's it! The best part is how easy it is to modify FixFlex layout code, insert
 
 `FixFlex` provides two functions for laying out views horizontally (`hstack`) and vertically (`vstack`), accessible through the `view.fx.*` namespace.
 
-You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. `startOffset`/`endOffset` are used to add spacing or offsets from the `startAnchor` and `endAnchor` respectively.
+You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. `startOffset`/`endOffset` are used to add spacing or offsets from the `startAnchor` and `endAnchor` respectively. Pass `nil` to leave a side unpinned (useful for allowing overflow).
 
 By default, `hstack` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hstack` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
 
 ```swift
 func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use leadingAnchor or leftAnchor
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0, // if nil, we do not pin to startAnchor
         endAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use trailingAnchor or rightAnchor
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0, // if nil, we do not pin to endAnchor
         useAbsolutePositioning: Bool = false, // if true, we use leftAnchor/rightAnchor based positioning (force Left-To-Right)
         _ intents: SizingIntent...
     ) -> StackingResult
@@ -113,9 +113,9 @@ func hstack(
 ```swift
 func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use topAnchor
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0, // if nil, we do not pin to startAnchor
         endAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use bottomAnchor
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0, // if nil, we do not pin to endAnchor
         _ intents: SizingIntent...
     ) -> StackingResult
 ```

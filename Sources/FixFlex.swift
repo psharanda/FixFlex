@@ -179,18 +179,16 @@ public struct StackingResult {
 public extension FixFlexing {
     private func _stack<AnchorType: AnyObject, AxisAnchorsBuilderType: AxisAnchorsBuilder>(
         startAnchor: NSLayoutAnchor<AnchorType>,
-        startOffset: CGFloat,
+        startOffset: CGFloat?,
         endAnchor: NSLayoutAnchor<AnchorType>,
-        endOffset: CGFloat,
+        endOffset: CGFloat?,
         builder: AxisAnchorsBuilderType,
         intents: [SizingIntent]
     ) -> StackingResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
-        assert(intents.count > 0)
-
         guard intents.count > 0 else {
             return StackingResult(constraints: [], layoutGuides: [])
         }
-        var lastAnchors = [startAnchor]
+        var lastAnchors = startOffset != nil ? [startAnchor] : []
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
         var constraints: [NSLayoutConstraint] = []
         var layoutGuides: [_LayoutGuide] = []
@@ -215,8 +213,12 @@ public extension FixFlexing {
 
             for aa in aas {
                 for lastAnchor in lastAnchors {
-                    constraints.append(aa.startAnchor.constraint(equalTo: lastAnchor,
-                                                                 constant: lastAnchor === startAnchor ? startOffset : 0))
+                    constraints.append(
+                        aa.startAnchor.constraint(
+                            equalTo: lastAnchor,
+                            constant: lastAnchor === startAnchor ? startOffset ?? 0 : 0
+                        )
+                    )
                 }
 
                 func handleSizingConstraint(_ constraint: NSLayoutConstraint) {
@@ -268,8 +270,10 @@ public extension FixFlexing {
             lastAnchors = aas.map { $0.endAnchor }
         }
 
-        for lastAnchor in lastAnchors {
-            constraints.append(lastAnchor.constraint(equalTo: endAnchor, constant: endOffset))
+        if let endOffset {
+            for lastAnchor in lastAnchors {
+                constraints.append(lastAnchor.constraint(equalTo: endAnchor, constant: endOffset))
+            }
         }
 
         NSLayoutConstraint.activate(constraints)
@@ -280,9 +284,9 @@ public extension FixFlexing {
     @discardableResult
     func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil,
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0,
         useAbsolutePositioning: Bool = false,
         _ intents: [SizingIntent]
     ) -> StackingResult {
@@ -297,9 +301,9 @@ public extension FixFlexing {
     @discardableResult
     func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil,
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0,
         endAnchor: NSLayoutXAxisAnchor? = nil,
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0,
         useAbsolutePositioning: Bool = false,
         _ intents: SizingIntent...
     ) -> StackingResult {
@@ -314,9 +318,9 @@ public extension FixFlexing {
     @discardableResult
     func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil,
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0,
         _ intents: [SizingIntent]
     ) -> StackingResult {
         return _stack(startAnchor: startAnchor ?? base.topAnchor,
@@ -330,9 +334,9 @@ public extension FixFlexing {
     @discardableResult
     func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil,
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0,
         endAnchor: NSLayoutYAxisAnchor? = nil,
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0,
         _ intents: SizingIntent...
     ) -> StackingResult {
         return vstack(startAnchor: startAnchor,

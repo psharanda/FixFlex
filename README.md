@@ -95,16 +95,16 @@ That's it! The best part is how easy it is to modify FixFlex layout code, insert
 
 `FixFlex` provides two functions for laying out views horizontally (`hstack`) and vertically (`vstack`), accessible through the `view.fx.*` namespace.
 
-You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. `startOffset`/`endOffset` are used to add spacing or offsets from the `startAnchor` and `endAnchor` respectively.
+You can specify `startAnchor`/`endAnchor` to layout items between arbitrary anchors instead of the view's edges. `startOffset`/`endOffset` are used to add spacing or offsets from the `startAnchor` and `endAnchor` respectively. Pass `nil` to leave a side unpinned (useful for allowing overflow).
 
 By default, `hstack` works in natural positioning mode and operates using `leadingAnchor`/`trailingAnchor`. This setup ensures that the layout is mirrored for Right-to-Left languages. However, this behavior can be overridden by enabling the `useAbsolutePositioning` flag. When this flag is set to true, `hstack` shifts to using `leftAnchor`/`rightAnchor` for layout positioning.
 
 ```swift
 func hstack(
         startAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use leadingAnchor or leftAnchor
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0, // if nil, we do not pin to startAnchor
         endAnchor: NSLayoutXAxisAnchor? = nil, // if nil, we use trailingAnchor or rightAnchor
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0, // if nil, we do not pin to endAnchor
         useAbsolutePositioning: Bool = false, // if true, we use leftAnchor/rightAnchor based positioning (force Left-To-Right)
         _ intents: SizingIntent...
     ) -> StackingResult
@@ -113,9 +113,9 @@ func hstack(
 ```swift
 func vstack(
         startAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use topAnchor
-        startOffset: CGFloat = 0,
+        startOffset: CGFloat? = 0, // if nil, we do not pin to startAnchor
         endAnchor: NSLayoutYAxisAnchor? = nil, // if nil, we use bottomAnchor
-        endOffset: CGFloat = 0,
+        endOffset: CGFloat? = 0, // if nil, we do not pin to endAnchor
         _ intents: SizingIntent...
     ) -> StackingResult
 ```
@@ -239,13 +239,17 @@ Huh, that's a lot of code to write, and imagine needing to modify it — inserti
      width="200"/>
 
 ```swift
-parent.fx.hstack(Fix(15),
-                 Flex(child),
-                 Fix(15))
+parent.fx.hstack(
+    Fix(15),
+    Flex(child),
+    Fix(15)
+)
 
-parent.fx.vstack(Fix(15),
-                 Flex(child),
-                 Fix(15))
+parent.fx.vstack(
+    Fix(15),
+    Flex(child),
+    Fix(15)
+)
 ```
 
 
@@ -257,13 +261,17 @@ parent.fx.vstack(Fix(15),
      width="200"/>
 
 ```swift
-parent.fx.hstack(Flex(),
-                 Fix(child, 100),
-                 Fix(15))
+parent.fx.hstack(
+    Flex(),
+    Fix(child, 100),
+    Fix(15)
+)
 
-parent.fx.vstack(Flex(),
-                 Fix(child, 50),
-                 Fix(15))
+parent.fx.vstack(
+    Flex(),
+    Fix(child, 50),
+    Fix(15)
+)
 ```
 
 
@@ -275,13 +283,17 @@ parent.fx.vstack(Flex(),
      width="200"/>
 
 ```swift
-parent.fx.hstack(Fill(),
-                 Fix(child, 100),
-                 Fill())
+parent.fx.hstack(
+    Fill(),
+    Fix(child, 100),
+    Fill()
+)
 
-parent.fx.vstack(Fill(),
-                 Fix(child, 50),
-                 Fill())
+parent.fx.vstack(
+    Fill(),
+    Fix(child, 50),
+    Fill()
+)
 ```
 
 
@@ -293,13 +305,17 @@ parent.fx.vstack(Fill(),
      width="200"/>
 
 ```swift
-parent.fx.hstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.hstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 
-parent.fx.vstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.vstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 ```
 
 
@@ -313,11 +329,13 @@ parent.fx.vstack(Fill(),
 ```swift
 parent.fx.hstack(Flex([topLabel, bottomLabel]))
 
-parent.fx.vstack(Fill(),
-                 Flex(topLabel),
-                 Fix(5),
-                 Flex(bottomLabel),
-                 Fill())
+parent.fx.vstack(
+    Fill(),
+    Flex(topLabel),
+    Fix(5),
+    Flex(bottomLabel),
+    Fill()
+)
 ```
 
 
@@ -329,26 +347,34 @@ parent.fx.vstack(Fill(),
      width="200"/>
 
 ```swift
-parent.fx.hstack(Fix(15),
-                 Fix(iconView, 44),
-                 Fix(15),
-                 Flex([titleLabel, subtitleLabel]),
-                 Fix(15),
-                 Fix(chevron, 20),
-                 Fix(15))
+parent.fx.hstack(
+    Fix(15),
+    Fix(iconView, 44),
+    Fix(15),
+    Flex([titleLabel, subtitleLabel]),
+    Fix(15),
+    Fix(chevron, 20),
+    Fix(15)
+)
 
-parent.fx.vstack(Fix(15),
-                 Fix(iconView, 44),
-                 Flex(min: 15))
+parent.fx.vstack(
+    Fix(15),
+    Fix(iconView, 44),
+    Flex(min: 15)
+)
 
-parent.fx.vstack(Fix(15),
-                 Flex(titleLabel),
-                 Flex(subtitleLabel),
-                 Fix(15))
+parent.fx.vstack(
+    Fix(15),
+    Flex(titleLabel),
+    Flex(subtitleLabel),
+    Fix(15)
+)
 
-parent.fx.vstack(Fill(),
-                 Fix(chevron, 30),
-                 Fill())
+parent.fx.vstack(
+    Fill(),
+    Fix(chevron, 30),
+    Fill()
+)
 ```
 
 
@@ -360,16 +386,20 @@ parent.fx.vstack(Fill(),
      width="200"/>
 
 ```swift
-parent.fx.hstack(Fix(5),
-                 Flex([iconView, titleLabel, subtitleLabel]),
-                 Fix(5))
+parent.fx.hstack(
+    Fix(5),
+    Flex([iconView, titleLabel, subtitleLabel]),
+    Fix(5)
+)
 
-parent.fx.vstack(Fix(5),
-                 Fix(iconView, 50),
-                 Fix(10),
-                 Flex(titleLabel),
-                 Flex(subtitleLabel),
-                 Fix(5))
+parent.fx.vstack(
+    Fix(5),
+    Fix(iconView, 50),
+    Fix(10),
+    Flex(titleLabel),
+    Flex(subtitleLabel),
+    Fix(5)
+)
 ```
 
 
@@ -381,11 +411,15 @@ parent.fx.vstack(Fix(5),
      width="200"/>
 
 ```swift
-parent.fx.vstack(Flex([leftLabel, rightLabel]))
+parent.fx.vstack(
+    Flex([leftLabel, rightLabel])
+)
 
-parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
-                 Fix(5),
-                 Flex(rightLabel))
+parent.fx.hstack(
+    Flex(leftLabel, compressionResistancePriority: .required),
+    Fix(5),
+    Flex(rightLabel)
+)
 ```
 
 
@@ -397,17 +431,21 @@ parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
      width="200"/>
 
 ```swift
-parent.fx.vstack(Fix(5),
-                 Flex([label1, label2, label3]),
-                 Fix(5))
+parent.fx.vstack(
+    Fix(5),
+    Flex([label1, label2, label3]),
+    Fix(5)
+)
 
-parent.fx.hstack(Fix(5),
-                 Fill(label1, weight: 2),
-                 Fix(5),
-                 Fill(label2),
-                 Fix(5),
-                 Fill(label3),
-                 Fix(5))
+parent.fx.hstack(
+    Fix(5),
+    Fill(label1, weight: 2),
+    Fix(5),
+    Fill(label2),
+    Fix(5),
+    Fill(label3),
+    Fix(5)
+)
 ```
 
 
@@ -419,26 +457,34 @@ parent.fx.hstack(Fix(5),
      width="200"/>
 
 ```swift
-parent.fx.vstack(Fix(5),
-                 Flex(label1),
-                 Flex(label2),
-                 Flex(label3),
-                 Fix(5))
+parent.fx.vstack(
+    Fix(5),
+    Flex(label1),
+    Flex(label2),
+    Flex(label3),
+    Fix(5)
+)
 
-parent.fx.hstack(Fix(5),
-                 Flex(label1),
-                 Flex(),
-                 Fix(5))
+parent.fx.hstack(
+    Fix(5),
+    Flex(label1),
+    Flex(),
+    Fix(5)
+)
 
-parent.fx.hstack(Fix(5),
-                 Flex(label2, min: 175),
-                 Flex(),
-                 Fix(5))
+parent.fx.hstack(
+    Fix(5),
+    Flex(label2, min: 175),
+    Flex(),
+    Fix(5)
+)
 
-parent.fx.hstack(Fix(5),
-                 Flex(label3, max: 100),
-                 Flex(),
-                 Fix(5))
+parent.fx.hstack(
+    Fix(5),
+    Flex(label3, max: 100),
+    Flex(),
+    Fix(5)
+)
 ```
 
 
@@ -450,17 +496,23 @@ parent.fx.hstack(Fix(5),
      width="200"/>
 
 ```swift
-parent.fx.vstack(Flex([label, leadingView, trailingView]))
+parent.fx.vstack(
+    Flex([label, leadingView, trailingView])
+)
 
-parent.fx.hstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.hstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 
-parent.fx.hstack(startAnchor: label.leadingAnchor,
-                 endAnchor: label.trailingAnchor,
-                 Fix(leadingView, 20),
-                 Flex(),
-                 Fix(trailingView, 20))
+parent.fx.hstack(
+    startAnchor: label.leadingAnchor,
+    endAnchor: label.trailingAnchor,
+    Fix(leadingView, 20),
+    Flex(),
+    Fix(trailingView, 20)
+)
 ```
 
 
@@ -472,18 +524,52 @@ parent.fx.hstack(startAnchor: label.leadingAnchor,
      width="200"/>
 
 ```swift
-parent.fx.vstack(Flex([label, leadingView, trailingView]))
+parent.fx.vstack(
+    Flex([label, leadingView, trailingView])
+)
 
-parent.fx.hstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.hstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 
-parent.fx.hstack(startAnchor: label.leftAnchor,
-                 endAnchor: label.rightAnchor,
-                 useAbsolutePositioning: true,
-                 Fix(leadingView, 20),
-                 Flex(),
-                 Fix(trailingView, 20))
+parent.fx.hstack(
+    startAnchor: label.leftAnchor,
+    endAnchor: label.rightAnchor,
+    useAbsolutePositioning: true,
+    Fix(leadingView, 20),
+    Flex(),
+    Fix(trailingView, 20)
+)
+```
+
+
+
+### Optional Offsets Allow Overflow
+
+<img class="snapshot"
+     src="FixFlexSamples/Ref/ReferenceImages_64/FixFlexSamplesTests.FixFlexTests/test_OptionalOffsetsAllowOverflow__default@3x.png"
+     width="260"/>
+
+```swift
+container.fx.vstack(
+    Fix(10),
+    Flex(leadingOverflowLabel),
+    Fix(10),
+    Flex(trailingOverflowLabel),
+    Fix(10)
+)
+
+container.fx.hstack(
+    startOffset: nil,
+    Flex(leadingOverflowLabel)
+)
+
+container.fx.hstack(
+    endOffset: nil,
+    Flex(trailingOverflowLabel)
+)
 ```
 
 
@@ -495,23 +581,31 @@ parent.fx.hstack(startAnchor: label.leftAnchor,
      width="200"/>
 
 ```swift
-parent.fx.vstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.vstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 
-parent.fx.hstack(Fill(),
-                 Flex(label),
-                 Fill())
+parent.fx.hstack(
+    Fill(),
+    Flex(label),
+    Fill()
+)
 
-parent.fx.vstack(startAnchor: label.topAnchor,
-                 Fix(10),
-                 Match(matchView, dimension: label.heightAnchor),
-                 Flex())
+parent.fx.vstack(
+    startAnchor: label.topAnchor,
+    Fix(10),
+    Match(matchView, dimension: label.heightAnchor),
+    Flex()
+)
 
-parent.fx.hstack(startAnchor: label.leadingAnchor,
-                 Fix(10),
-                 Match(matchView, dimension: label.widthAnchor),
-                 Flex())
+parent.fx.hstack(
+    startAnchor: label.leadingAnchor,
+    Fix(10),
+    Match(matchView, dimension: label.widthAnchor),
+    Flex()
+)
 ```
 
 

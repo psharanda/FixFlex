@@ -20,13 +20,17 @@ class FixFlexStories: DynamicComponentStories {
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
         // demo
-        parent.fx.hstack(Fix(15),
-                         Flex(child),
-                         Fix(15))
-        
-        parent.fx.vstack(Fix(15),
-                         Flex(child),
-                         Fix(15))
+        parent.fx.hstack(
+            Fix(15),
+            Flex(child),
+            Fix(15)
+        )
+
+        parent.fx.vstack(
+            Fix(15),
+            Flex(child),
+            Fix(15)
+        )
 
         return parent
     }
@@ -43,15 +47,18 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
-        
         // demo
-        parent.fx.hstack(Flex(),
-                         Fix(child, 100),
-                         Fix(15))
+        parent.fx.hstack(
+            Flex(),
+            Fix(child, 100),
+            Fix(15)
+        )
 
-        parent.fx.vstack(Flex(),
-                         Fix(child, 50),
-                         Fix(15))
+        parent.fx.vstack(
+            Flex(),
+            Fix(child, 50),
+            Fix(15)
+        )
 
         return parent
     }
@@ -69,13 +76,17 @@ class FixFlexStories: DynamicComponentStories {
         parent.heightAnchor.constraint(equalToConstant: 100).isActive = true
 
         // demo
-        parent.fx.hstack(Fill(),
-                         Fix(child, 100),
-                         Fill())
+        parent.fx.hstack(
+            Fill(),
+            Fix(child, 100),
+            Fill()
+        )
 
-        parent.fx.vstack(Fill(),
-                         Fix(child, 50),
-                         Fill())
+        parent.fx.vstack(
+            Fill(),
+            Fix(child, 50),
+            Fill()
+        )
 
         return parent
     }
@@ -96,13 +107,17 @@ class FixFlexStories: DynamicComponentStories {
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.hstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.hstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
-        parent.fx.vstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.vstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
         return parent
     }
@@ -132,11 +147,13 @@ class FixFlexStories: DynamicComponentStories {
         // demo
         parent.fx.hstack(Flex([topLabel, bottomLabel]))
 
-        parent.fx.vstack(Fill(),
-                         Flex(topLabel),
-                         Fix(5),
-                         Flex(bottomLabel),
-                         Fill())
+        parent.fx.vstack(
+            Fill(),
+            Flex(topLabel),
+            Fix(5),
+            Flex(bottomLabel),
+            Fill()
+        )
 
         return parent
     }
@@ -172,26 +189,34 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.hstack(Fix(15),
-                         Fix(iconView, 44),
-                         Fix(15),
-                         Flex([titleLabel, subtitleLabel]),
-                         Fix(15),
-                         Fix(chevron, 20),
-                         Fix(15))
+        parent.fx.hstack(
+            Fix(15),
+            Fix(iconView, 44),
+            Fix(15),
+            Flex([titleLabel, subtitleLabel]),
+            Fix(15),
+            Fix(chevron, 20),
+            Fix(15)
+        )
 
-        parent.fx.vstack(Fix(15),
-                         Fix(iconView, 44),
-                         Flex(min: 15))
+        parent.fx.vstack(
+            Fix(15),
+            Fix(iconView, 44),
+            Flex(min: 15)
+        )
 
-        parent.fx.vstack(Fix(15),
-                         Flex(titleLabel),
-                         Flex(subtitleLabel),
-                         Fix(15))
+        parent.fx.vstack(
+            Fix(15),
+            Flex(titleLabel),
+            Flex(subtitleLabel),
+            Fix(15)
+        )
 
-        parent.fx.vstack(Fill(),
-                         Fix(chevron, 30),
-                         Fill())
+        parent.fx.vstack(
+            Fill(),
+            Fix(chevron, 30),
+            Fill()
+        )
 
         return parent
     }
@@ -225,16 +250,20 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.hstack(Fix(5),
-                         Flex([iconView, titleLabel, subtitleLabel]),
-                         Fix(5))
+        parent.fx.hstack(
+            Fix(5),
+            Flex([iconView, titleLabel, subtitleLabel]),
+            Fix(5)
+        )
 
-        parent.fx.vstack(Fix(5),
-                         Fix(iconView, 50),
-                         Fix(10),
-                         Flex(titleLabel),
-                         Flex(subtitleLabel),
-                         Fix(5))
+        parent.fx.vstack(
+            Fix(5),
+            Fix(iconView, 50),
+            Fix(10),
+            Flex(titleLabel),
+            Flex(subtitleLabel),
+            Fix(5)
+        )
 
         return parent
     }
@@ -261,11 +290,15 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Flex([leftLabel, rightLabel]))
+        parent.fx.vstack(
+            Flex([leftLabel, rightLabel])
+        )
 
-        parent.fx.hstack(Flex(leftLabel, compressionResistancePriority: .required),
-                         Fix(5),
-                         Flex(rightLabel))
+        parent.fx.hstack(
+            Flex(leftLabel, compressionResistancePriority: .required),
+            Fix(5),
+            Flex(rightLabel)
+        )
 
         return parent
     }
@@ -299,17 +332,21 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Fix(5),
-                         Flex([label1, label2, label3]),
-                         Fix(5))
+        parent.fx.vstack(
+            Fix(5),
+            Flex([label1, label2, label3]),
+            Fix(5)
+        )
 
-        parent.fx.hstack(Fix(5),
-                         Fill(label1, weight: 2),
-                         Fix(5),
-                         Fill(label2),
-                         Fix(5),
-                         Fill(label3),
-                         Fix(5))
+        parent.fx.hstack(
+            Fix(5),
+            Fill(label1, weight: 2),
+            Fix(5),
+            Fill(label2),
+            Fix(5),
+            Fill(label3),
+            Fix(5)
+        )
 
         return parent
     }
@@ -343,26 +380,34 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Fix(5),
-                         Flex(label1),
-                         Flex(label2),
-                         Flex(label3),
-                         Fix(5))
+        parent.fx.vstack(
+            Fix(5),
+            Flex(label1),
+            Flex(label2),
+            Flex(label3),
+            Fix(5)
+        )
 
-        parent.fx.hstack(Fix(5),
-                         Flex(label1),
-                         Flex(),
-                         Fix(5))
+        parent.fx.hstack(
+            Fix(5),
+            Flex(label1),
+            Flex(),
+            Fix(5)
+        )
 
-        parent.fx.hstack(Fix(5),
-                         Flex(label2, min: 175),
-                         Flex(),
-                         Fix(5))
+        parent.fx.hstack(
+            Fix(5),
+            Flex(label2, min: 175),
+            Flex(),
+            Fix(5)
+        )
 
-        parent.fx.hstack(Fix(5),
-                         Flex(label3, max: 100),
-                         Flex(),
-                         Fix(5))
+        parent.fx.hstack(
+            Fix(5),
+            Flex(label3, max: 100),
+            Flex(),
+            Fix(5)
+        )
 
         return parent
     }
@@ -390,17 +435,23 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Flex([label, leadingView, trailingView]))
+        parent.fx.vstack(
+            Flex([label, leadingView, trailingView])
+        )
 
-        parent.fx.hstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.hstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
-        parent.fx.hstack(startAnchor: label.leadingAnchor,
-                         endAnchor: label.trailingAnchor,
-                         Fix(leadingView, 20),
-                         Flex(),
-                         Fix(trailingView, 20))
+        parent.fx.hstack(
+            startAnchor: label.leadingAnchor,
+            endAnchor: label.trailingAnchor,
+            Fix(leadingView, 20),
+            Flex(),
+            Fix(trailingView, 20)
+        )
 
         return parent
     }
@@ -428,18 +479,87 @@ class FixFlexStories: DynamicComponentStories {
         parent.widthAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Flex([label, leadingView, trailingView]))
+        parent.fx.vstack(
+            Flex([label, leadingView, trailingView])
+        )
 
-        parent.fx.hstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.hstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
-        parent.fx.hstack(startAnchor: label.leftAnchor,
-                         endAnchor: label.rightAnchor,
-                         useAbsolutePositioning: true,
-                         Fix(leadingView, 20),
-                         Flex(),
-                         Fix(trailingView, 20))
+        parent.fx.hstack(
+            startAnchor: label.leftAnchor,
+            endAnchor: label.rightAnchor,
+            useAbsolutePositioning: true,
+            Fix(leadingView, 20),
+            Flex(),
+            Fix(trailingView, 20)
+        )
+
+        return parent
+    }
+
+    @objc static func story_OptionalOffsetsAllowOverflow() -> UIView {
+        let leadingOverflowLabel = UILabel()
+        leadingOverflowLabel.text = "Only trailing is pinned, so this label can overflow on the leading side"
+        leadingOverflowLabel.font = .preferredFont(forTextStyle: .headline)
+        leadingOverflowLabel.adjustsFontForContentSizeCategory = true
+        leadingOverflowLabel.backgroundColor = .systemYellow
+        leadingOverflowLabel.numberOfLines = 1
+        leadingOverflowLabel.textAlignment = .right
+
+        let trailingOverflowLabel = UILabel()
+        trailingOverflowLabel.text = "Only leading is pinned, so this label can overflow on the trailing side"
+        trailingOverflowLabel.font = .preferredFont(forTextStyle: .headline)
+        trailingOverflowLabel.adjustsFontForContentSizeCategory = true
+        trailingOverflowLabel.backgroundColor = .systemOrange
+        trailingOverflowLabel.numberOfLines = 1
+
+        let parent = UIView()
+        parent.clipsToBounds = true
+        parent.translatesAutoresizingMaskIntoConstraints = false
+        parent.widthAnchor.constraint(equalToConstant: 260).isActive = true
+
+        let container = UIView()
+        container.backgroundColor = .systemMint
+
+        parent.addSubview(container)
+
+        container.addSubview(leadingOverflowLabel)
+        container.addSubview(trailingOverflowLabel)
+
+        parent.fx.hstack(
+            Fix(40),
+            Flex(container),
+            Fix(40)
+        )
+
+        parent.fx.vstack(
+            Fix(40),
+            Flex(container),
+            Fix(40)
+        )
+
+        // demo
+        container.fx.vstack(
+            Fix(10),
+            Flex(leadingOverflowLabel),
+            Fix(10),
+            Flex(trailingOverflowLabel),
+            Fix(10)
+        )
+
+        container.fx.hstack(
+            startOffset: nil,
+            Flex(leadingOverflowLabel)
+        )
+
+        container.fx.hstack(
+            endOffset: nil,
+            Flex(trailingOverflowLabel)
+        )
 
         return parent
     }
@@ -465,23 +585,31 @@ class FixFlexStories: DynamicComponentStories {
         parent.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
         // demo
-        parent.fx.vstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.vstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
-        parent.fx.hstack(Fill(),
-                         Flex(label),
-                         Fill())
+        parent.fx.hstack(
+            Fill(),
+            Flex(label),
+            Fill()
+        )
 
-        parent.fx.vstack(startAnchor: label.topAnchor,
-                         Fix(10),
-                         Match(matchView, dimension: label.heightAnchor),
-                         Flex())
+        parent.fx.vstack(
+            startAnchor: label.topAnchor,
+            Fix(10),
+            Match(matchView, dimension: label.heightAnchor),
+            Flex()
+        )
 
-        parent.fx.hstack(startAnchor: label.leadingAnchor,
-                         Fix(10),
-                         Match(matchView, dimension: label.widthAnchor),
-                         Flex())
+        parent.fx.hstack(
+            startAnchor: label.leadingAnchor,
+            Fix(10),
+            Match(matchView, dimension: label.widthAnchor),
+            Flex()
+        )
 
         return parent
     }
