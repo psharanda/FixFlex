@@ -124,11 +124,11 @@ func vstack(
 
 - `constraints`: all constraints activated for the stack
 - `layoutGuides`: guides created for spacers/fills
-- `startConstraints`: constraints that pin the first item(s) to `startAnchor` using `startOffset`
-- `endConstraints`: constraints that pin the last item(s) to `endAnchor` using `endOffset`
 
 You can customize generated pieces via callbacks on `SizingIntent`:
 
+- `onCreateStartConstraint(_:)` lets you tweak each constraint that pins an item to the previous anchor (or stack start)
+- `onCreateEndConstraint(_:)` lets you tweak the constraint that pins the final item to the end anchor
 - `onCreateDimensionConstraint(_:)` lets you tweak each size constraint (e.g., priority or identifier)
 - `onCreateLayoutGuide(_:)` gives you the implicit `UILayoutGuide` for configuration
 

@@ -63,9 +63,6 @@ public struct SizingIntent {
 
     let sizing: Sizing
 
-    var onCreateDimensionConstraint: ((NSLayoutConstraint) -> Void)?
-    var onCreateLayoutGuide: ((_LayoutGuide) -> Void)?
-
     #if DEBUG
     init(views: [_View]?, sizing: Sizing, fileID: String, line: Int) {
         self.views = views
@@ -80,6 +77,8 @@ public struct SizingIntent {
     }
     #endif
 
+    var onCreateDimensionConstraint: ((NSLayoutConstraint) -> Void)?
+
     public func onCreateDimensionConstraint(
         _ block: @escaping (NSLayoutConstraint) -> Void
     ) -> SizingIntent {
@@ -87,6 +86,28 @@ public struct SizingIntent {
         newSelf.onCreateDimensionConstraint = block
         return newSelf
     }
+
+    var onCreateStartConstraint: ((NSLayoutConstraint) -> Void)?
+
+    public func onCreateStartConstraint(
+        _ block: @escaping (NSLayoutConstraint) -> Void
+    ) -> SizingIntent {
+        var newSelf = self
+        newSelf.onCreateStartConstraint = block
+        return newSelf
+    }
+
+    var onCreateEndConstraint: ((NSLayoutConstraint) -> Void)?
+
+    public func onCreateEndConstraint(
+        _ block: @escaping (NSLayoutConstraint) -> Void
+    ) -> SizingIntent {
+        var newSelf = self
+        newSelf.onCreateEndConstraint = block
+        return newSelf
+    }
+
+    var onCreateLayoutGuide: ((_LayoutGuide) -> Void)?
 
     public func onCreateLayoutGuide(
         _ block: @escaping (_LayoutGuide) -> Void
@@ -507,9 +528,6 @@ private struct YAxisAnchorsBuilder: AxisAnchorsBuilder {
 public struct StackingResult {
     public let constraints: [NSLayoutConstraint]
     public let layoutGuides: [_LayoutGuide]
-
-    public let startConstraints: [NSLayoutConstraint]
-    public let endConstraints: [NSLayoutConstraint]
 }
 
 public extension FixFlexing {
@@ -525,9 +543,7 @@ public extension FixFlexing {
         guard intents.count > 0 else {
             return StackingResult(
                 constraints: [],
-                layoutGuides: [],
-                startConstraints: [],
-                endConstraints: []
+                layoutGuides: []
             )
         }
 
@@ -551,8 +567,6 @@ public extension FixFlexing {
         var lastAnchors = startOffset != nil ? [startAnchor] : []
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
         var constraints: [NSLayoutConstraint] = []
-        var startConstraints: [NSLayoutConstraint] = []
-        var endConstraints: [NSLayoutConstraint] = []
         var layoutGuides: [_LayoutGuide] = []
 
         for (intentIndex, intent) in intents.enumerated() {
@@ -592,7 +606,7 @@ public extension FixFlexing {
                     #endif
 
                     constraints.append(constraint)
-                    startConstraints.append(constraint)
+                    intent.onCreateStartConstraint?(constraint)
                 }
 
                 func handleSizingConstraint(_ constraint: NSLayoutConstraint) {
@@ -680,20 +694,19 @@ public extension FixFlexing {
         if let endOffset {
             for (lastAnchorIndex, lastAnchor) in lastAnchors.enumerated() {
                 let constraint = lastAnchor.constraint(equalTo: endAnchor, constant: endOffset)
+                let lastIntent = intents.last!
                 #if DEBUG
-                if let lastIntent = intents.last {
-                    constraint.identifier = constraintIdentifier(
-                        sizing: lastIntent.sizing,
-                        section: "end",
-                        intentIndex: intents.count - 1,
-                        targetIndex: lastAnchorIndex,
-                        fileID: lastIntent.fileID,
-                        line: lastIntent.line
-                    )
-                }
+                constraint.identifier = constraintIdentifier(
+                    sizing: lastIntent.sizing,
+                    section: "end",
+                    intentIndex: intents.count - 1,
+                    targetIndex: lastAnchorIndex,
+                    fileID: lastIntent.fileID,
+                    line: lastIntent.line
+                )
                 #endif
                 constraints.append(constraint)
-                endConstraints.append(constraint)
+                lastIntent.onCreateEndConstraint?(constraint)
             }
         }
 
@@ -701,9 +714,7 @@ public extension FixFlexing {
 
         return StackingResult(
             constraints: constraints,
-            layoutGuides: layoutGuides,
-            startConstraints: startConstraints,
-            endConstraints: endConstraints
+            layoutGuides: layoutGuides
         )
     }
 
