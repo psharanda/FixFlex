@@ -120,6 +120,13 @@ func vstack(
     ) -> StackingResult
 ```
 
+`StackingResult` gives access to everything created during stacking so you can adjust or deactivate pieces later:
+
+- `constraints`: all constraints activated for the stack
+- `layoutGuides`: guides created for spacers/fills
+- `startConstraints`: constraints that pin the first item(s) to `startAnchor` using `startOffset`
+- `endConstraints`: constraints that pin the last item(s) to `endAnchor` using `endOffset`
+
 A `SizingIntent` is essentially an instruction for calculating the width or height of:
 
 - a spacer (for which a `UILayoutGuide` is created behind the scenes)
@@ -267,6 +274,7 @@ https://github.com/psharanda/FixFlex.git
 Add `github "psharanda/FixFlex"` to your `Cartfile`
 
 ### CocoaPods
+
 `FixFlex` is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 

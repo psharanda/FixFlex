@@ -174,6 +174,9 @@ private struct YAxisAnchorsBuilder: AxisAnchorsBuilder {
 public struct StackingResult {
     public let constraints: [NSLayoutConstraint]
     public let layoutGuides: [_LayoutGuide]
+    
+    public let startConstraints: [NSLayoutConstraint]
+    public let endConstraints: [NSLayoutConstraint]
 }
 
 public extension FixFlexing {
@@ -186,11 +189,13 @@ public extension FixFlexing {
         intents: [SizingIntent]
     ) -> StackingResult where AxisAnchorsBuilderType.AnchorType == AnchorType {
         guard intents.count > 0 else {
-            return StackingResult(constraints: [], layoutGuides: [])
+            return StackingResult(constraints: [], layoutGuides: [], startConstraints: [], endConstraints: [])
         }
         var lastAnchors = startOffset != nil ? [startAnchor] : []
         var weightsInfo: (dimensionAnchor: NSLayoutDimension, weight: CGFloat)?
         var constraints: [NSLayoutConstraint] = []
+        var startConstraints: [NSLayoutConstraint] = []
+        var endConstraints: [NSLayoutConstraint] = []
         var layoutGuides: [_LayoutGuide] = []
 
         for intent in intents {
@@ -213,12 +218,13 @@ public extension FixFlexing {
 
             for aa in aas {
                 for lastAnchor in lastAnchors {
-                    constraints.append(
-                        aa.startAnchor.constraint(
-                            equalTo: lastAnchor,
-                            constant: lastAnchor === startAnchor ? startOffset ?? 0 : 0
-                        )
+                    let constraint = aa.startAnchor.constraint(
+                        equalTo: lastAnchor,
+                        constant: lastAnchor === startAnchor ? startOffset ?? 0 : 0
                     )
+                    
+                    constraints.append(constraint)
+                    startConstraints.append(constraint)
                 }
 
                 func handleSizingConstraint(_ constraint: NSLayoutConstraint) {
@@ -272,13 +278,20 @@ public extension FixFlexing {
 
         if let endOffset {
             for lastAnchor in lastAnchors {
-                constraints.append(lastAnchor.constraint(equalTo: endAnchor, constant: endOffset))
+                let constraint = lastAnchor.constraint(equalTo: endAnchor, constant: endOffset)
+                constraints.append(constraint)
+                endConstraints.append(constraint)
             }
         }
 
         NSLayoutConstraint.activate(constraints)
 
-        return StackingResult(constraints: constraints, layoutGuides: layoutGuides)
+        return StackingResult(
+            constraints: constraints,
+            layoutGuides: layoutGuides,
+            startConstraints: startConstraints,
+            endConstraints: endConstraints
+        )
     }
 
     @discardableResult
