@@ -8,16 +8,17 @@
 
 - Declarative Auto Layout code that is easy to write, read, and modify
 - Simple API with 2 functions and 4 specifiers, covering 99% of layout use cases
-- Implementation is only 300 lines of code
+- Single-file implementation with a tiny surface area
 - Compatible with any other Auto Layout code
 - Basically generates a bunch of activated `NSLayoutConstraint` and `UILayoutGuide`
-- Keeps your view hierarchy flat, no need for exta containers
+- Keeps your view hierarchy flat, no need for extra containers
 - Lightweight alternative to `UIStackView`
 - Super straightforward mental model
 - Typesafe alternative to VFL
 - Dynamic Type and Right-To-Left friendly
 - Automatically sets `translatesAutoresizingMaskIntoConstraints` to false
-- Supports iOS 12.0+ / Mac OS X 10.13+ / tvOS 12.0+
+- Fully documented with 100% test coverage
+- Supports iOS 12.0+ / macOS 10.13+ / tvOS 12.0+
 
 ## Usage
 
@@ -125,6 +126,12 @@ func vstack(
 - `constraints`: all constraints activated for the stack
 - `layoutGuides`: guides created for spacers/fills
 
+### Behavior notes
+
+- `hstack` defaults to leading/trailing so layouts mirror in RTL; set `useAbsolutePositioning: true` to force left/right.
+- `startOffset`/`endOffset = nil` leaves the leading/trailing item unpinned and should only be used when other constraints define its position.
+- `Flex` on views keeps existing hugging/compression unless you pass overrides; the spacer-only overload applies `.required` by default.
+
 A `SizingIntent` is essentially an instruction for calculating the width or height of:
 
 - a spacer (for which a `UILayoutGuide` is created behind the scenes)
@@ -174,11 +181,11 @@ func Fill(_ views: [_View], weight: CGFloat = 1.0) -> SizingIntent
 This is used to match the size of a view or spacer to a specified `NSLayoutDimension`. It is particularly useful for aligning the sizes of different views or spacers, or for making their sizes proportional to each other.
 
 ```swift
-public func Match(dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
+public func Match(dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> SizingIntent
 
-public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
+public func Match(_ view: _View, dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> SizingIntent
 
-public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat? = nil, offset: CGFloat? = nil) -> SizingIntent
+public func Match(_ views: [_View], dimension: NSLayoutDimension, multiplier: CGFloat = 1, offset: CGFloat = 0) -> SizingIntent
 ```
 
 ### SizingIntent Modifiers
@@ -210,7 +217,7 @@ parent.fx.vstack(Fill(),
                  Fill())
 ```
 
-Under the hood, FixFlex creates constraints and layout guides which equivalent to the following:
+Under the hood, FixFlex creates constraints and layout guides which are equivalent to the following:
 
 ```swift
 topLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -268,7 +275,7 @@ Use Swift Package Manager and add dependency to `Package.swift` file.
 
 ```swift
   dependencies: [
-    .package(url: "https://github.com/psharanda/FixFlex.git", .upToNextMajor(from: "1.0.0"))
+    .package(url: "https://github.com/psharanda/FixFlex.git", .upToNextMajor(from: "1.3.0"))
   ]
 ```
 

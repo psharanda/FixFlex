@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "FixFlex"
-  s.version      = "1.2.3"
+  s.version      = "1.3.0"
   s.summary      = "Declarative Auto Layout code that is easy to write, read, and modify"
   s.description  = <<-DESC
     `FixFlex` is a simple yet powerful Auto Layout library built on top of the NSLayoutAnchor API, a swifty and type-safe reimagination of Visual Format Language
